@@ -9,7 +9,7 @@ import SwiftUI
 
 struct food_sheet: View {
     @Binding var selectedPreferences4: [String]
-    let foodType = ["Veg", "Non Veg"]
+    let foodType = ["veg", "nonveg"]
     @State private var selectedIndex_food: Int? = nil
     @Environment(\.dismiss) var dismiss
     
@@ -64,10 +64,26 @@ struct food_sheet: View {
                         
                 }.frame(height: 30)
                 Button(action: {
-                    let newAgePreferences = foodType.enumerated().compactMap { index, age in
-                        selectedIndex_food == index ? age : nil
+                    let newfood = foodType.enumerated().compactMap { index, food in
+                        selectedIndex_food == index ? food : nil
                     }
-                    selectedPreferences4 = newAgePreferences
+                    selectedPreferences4 = newfood
+                    var x = print("\(newfood.first!) ** \(selectedPreferences4)")
+                                        
+                    let userProfile = UserProfile2(foodtype: newfood.first)
+                     
+                     AuthService.UploadUserData(userProfile: userProfile) { result in
+                         switch result {
+                         case .success(let data):
+                             if let responseData = data {
+                                 print("Upload food successful")
+                             } else {
+                                 print("Upload food successful, but no response data")
+                             }
+                         case .failure(let error):
+                             print("Upload failed with error: \(error.localizedDescription)")
+                         }
+                     }
                     
                     dismiss()
                 }) {

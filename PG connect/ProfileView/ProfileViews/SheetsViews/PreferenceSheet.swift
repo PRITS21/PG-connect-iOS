@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct PreferenceSheet: View {
+    @State private var existingPreferencesArray: [String] = []
+
     @Binding var selectedPreferences: [String]
     let AgeGroup = ["20 below", "20-25", "25-30","30-35", "35-40", "40+"]
     let tvGroup = ["Needed", "Not Needed"]
@@ -165,7 +167,20 @@ struct PreferenceSheet: View {
                     }
                     selectedPreferences.append(contentsOf: newTvPreferences)
                     
-                    print(selectedPreferences)
+                    let userProfile = UserProfile2(prefrences: selectedPreferences)
+                     
+                     AuthService.UploadUserData(userProfile: userProfile) { result in
+                         switch result {
+                         case .success(let data):
+                             if let responseData = data {
+                                 print("Upload prefrences successful")
+                             } else {
+                                 print("Upload prefrences successful, but no response data")
+                             }
+                         case .failure(let error):
+                             print("Upload failed with error: \(error.localizedDescription)")
+                         }
+                     }
                     dismiss()
                     
                 }) {

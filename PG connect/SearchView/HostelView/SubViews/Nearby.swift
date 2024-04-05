@@ -9,7 +9,7 @@ import SwiftUI
 
 
 struct NearbyView: View {
-    @State private var nearbyPlaces: [String] = ["Taj Royal Bengal", "Hyaat Recidency"]
+    let nearbyPlaces: [Nearby]
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -23,7 +23,7 @@ struct NearbyView: View {
             .padding(.top, 2)
             
             ForEach(nearbyPlaces, id: \.self) { place in
-                NearbyLocationView(place: place)
+                NearbyLocationView(nearby: place.name, distance: place.distance)
             }
         }
         .padding(.leading)
@@ -32,29 +32,25 @@ struct NearbyView: View {
 }
 
 struct NearbyLocationView: View {
-    var place: String
-    
+    let nearby: String
+    var distance: String
     var body: some View {
         HStack {
             HStack(spacing: 2) {
                 Image(uiImage: UIImage(named: "location_icon_gray")!)
                     .resizable()
                     .frame(width: 14, height: 14)
-                Text(place)
+                Text(nearby)
                     .font(.system(size: 12))
                     .fontWeight(.medium)
             }.padding(.top, 2)
             
             Spacer()
-            Text("1KM")
+            Text("\(distance) KM")
                 .font(.system(size: 12))
                 .bold()
                 .padding(.trailing)
         }
         
     }
-}
-
-#Preview {
-    NearbyView()
 }

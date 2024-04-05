@@ -14,13 +14,7 @@ struct AmenityItem: Identifiable {
 }
 
 struct AmenitiesView: View {
-    let amenities: [AmenityItem] = [
-        AmenityItem(name: "TV", imageName: "tv_icon"),
-        AmenityItem(name: "AC", imageName: "tv_icon"),
-        AmenityItem(name: "Wi-Fi", imageName: "tv_icon"),
-        AmenityItem(name: "Parking", imageName: "tv_icon"),
-        
-    ]
+    let amenities: [String]
     
     var body: some View {
         VStack(spacing: 1) {
@@ -36,17 +30,17 @@ struct AmenitiesView: View {
             
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 15) {
-                    ForEach(amenities) { amenity in
+                    ForEach(amenities, id: \.self) { amenity in
                         HStack {
                             ZStack {
                                 Circle()
                                     .frame(width: 25, height: 25)
                                     .foregroundColor(.blue.opacity(0.15))
-                                Image(amenity.imageName)
+                                Image("tv_icon")
                                     .resizable()
                                     .frame(width: 15, height: 15)
                             }
-                            Text(amenity.name)
+                            Text("\(amenity)")
                                 .font(.system(size: 12))
                         }
                     }
@@ -58,10 +52,3 @@ struct AmenitiesView: View {
     }
 }
 
-
-struct AmenitiesView_Previews: PreviewProvider {
-    static var previews: some View {
-        AmenitiesView()
-
-    }
-}

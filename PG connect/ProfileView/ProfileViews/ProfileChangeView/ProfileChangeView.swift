@@ -9,12 +9,23 @@ import SwiftUI
 import MobileCoreServices
 
 struct ProfileChangeView: View {
+    @ObservedObject var viewModel = AuthService.shared
+    @State private var userProfile: UserProfileResponse?
+    @State private var userDataUpload = UserProfile2(
+            alternatenumber: "", // Provide value for this property
+            officehoursstart: "", // Provide value for this property
+            officehoursend: "", // Provide value for this property
+            education: "", // Provide value for this property
+            aadharnumber: "",
+            vehiclenumber: "", // Provide value for this property
+            drivinglicense: "",
+            companyname: "", // Provide value for this property
+            occupation: "",
+            location: "",
+            officeaddress: ""
+           
+        )
     
-    @State private var Ocupation: String = ""
-    @State private var Location: String = ""
-    @State private var Office: String = ""
-    @State private var Aadhar: String = ""
-    @State private var License: String = ""
     @Environment(\.dismiss) var dismiss
     @State private var licenseNumber = ""
     @State private var selectedFileURL_DL: URL?
@@ -57,9 +68,22 @@ struct ProfileChangeView: View {
                                 .frame(width: 110, height: 110)
                                 .clipShape(Circle())
                         } else {
-                            Image(systemName: "person.circle.fill")
-                                .resizable()
-                                .frame(width: 110, height: 110)
+                            if let userProfile = viewModel.ProfileData {
+                                if let imageUrl = URL(string: userProfile.profileimage) {
+                                    AsyncImage(url: imageUrl) { image in
+                                        image
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width: 100, height: 100)
+                                            .clipShape(Circle())
+                                    } placeholder: {
+                                        Image(systemName: "person.circle.fill")
+                                            .resizable()
+                                            .frame(width: 100, height: 100)
+                                            .clipShape(Circle())
+                                    }
+                                }
+                            }
                         }
                         
                         
@@ -79,12 +103,26 @@ struct ProfileChangeView: View {
                             ImagePicker(selectedImage: $selectedImage)
                         }
                         
-                        ProfileDetailsButtons(title1: "Full Name", title2: "Pritam Sarkar")
-                            .padding(.top, 20)
-                        ProfileDetailsButtons(title1: "Gender", title2: "Male")
-                        ProfileDetailsButtons(title1: "DOB", title2: " 2003-01-09")
-                        ProfileDetailsButtons(title1: "Email", title2: "saarkarpritam16@gmail.com")
-                        ProfileDetailsButtons(title1: "Mobile", title2: "9123456789")
+                        
+                        if let userProfile = viewModel.ProfileData {
+                            ProfileDetailsButtons(title1: "Full Name", title2: userProfile.name)
+                                .padding(.top, 20)
+                            ProfileDetailsButtons(title1: "Gender", title2: userProfile.gender)
+                            
+                            if let dobString = userProfile.dob,
+                               let dobDate = parseDate(from: dobString) { let formattedDOB = formatDate(dobDate)
+                                
+                                ProfileDetailsButtons(title1: "DOB", title2: formattedDOB) }
+                            ProfileDetailsButtons(title1: "Email", title2: userProfile.email)
+                            ProfileDetailsButtons(title1: "Mobile", title2: userProfile.phone)
+                        } else {
+                            ProfileDetailsButtons(title1: "Full Name", title2: "")
+                                .padding(.top, 20)
+                            ProfileDetailsButtons(title1: "Gender", title2: "")
+                            ProfileDetailsButtons(title1: "DOB", title2: "")
+                            ProfileDetailsButtons(title1: "Email", title2: "")
+                            ProfileDetailsButtons(title1: "Mobile", title2: "")
+                        }
                         
                         
                         //TextFields
@@ -98,7 +136,11 @@ struct ProfileChangeView: View {
                                     .font(.system(size: 12))
                                 Spacer()
                             }
-                            TextField("", text: $Ocupation)
+                            TextField("", text: Binding(
+                                get: { userDataUpload.occupation ?? "" },
+                                set: { userDataUpload.occupation = $0 }
+                            ))
+
                                 .frame(height: 25)
                                 .font(.subheadline)
                                 .padding(.vertical, 4)
@@ -118,7 +160,11 @@ struct ProfileChangeView: View {
                                     .font(.system(size: 12))
                                 Spacer()
                             }
-                            TextField("", text: $Location)
+                            TextField("", text: Binding(
+                                get: { userDataUpload.location ?? "" },
+                                set: { userDataUpload.location = $0 }
+                            ))
+
                                 .frame(height: 25)
                                 .font(.subheadline)
                                 .padding(.vertical, 4)
@@ -138,7 +184,11 @@ struct ProfileChangeView: View {
                                     .font(.system(size: 12))
                                 Spacer()
                             }
-                            TextField("", text: $Office)
+                            TextField("", text: Binding(
+                                get: { userDataUpload.officeaddress ?? "" },
+                                set: { userDataUpload.officeaddress = $0 }
+                            ))
+
                                 .frame(height: 80)
                                 .font(.subheadline)
                                 .padding(.vertical, 4)
@@ -159,7 +209,11 @@ struct ProfileChangeView: View {
                                 Spacer()
                             }
                             HStack {
-                                TextField("Aadhar number", text: $Aadhar)
+                                TextField("", text: Binding(
+                                    get: { userDataUpload.aadharnumber ?? "" },
+                                    set: { userDataUpload.aadharnumber = $0 }
+                                ))
+
                                     .frame(width: 120,height: 25)
                                     .font(.system(size: 12))
                                     .padding(.vertical, 2)
@@ -170,7 +224,7 @@ struct ProfileChangeView: View {
                                 }) {
                                     Image(uiImage: selectedFileURL_Adhr != nil ? UIImage(systemName: "doc")! : UIImage(named: "FileUpload_button")!)
                                         .resizable()
-                                        
+                                    
                                 }
                                 .frame(width: 120,height: 30)
                                 .background(Color(UIColor(hex: "#EF7C1F")))
@@ -191,7 +245,11 @@ struct ProfileChangeView: View {
                                 Spacer()
                             }
                             HStack {
-                                TextField("License no.", text: $License)
+                                TextField("", text: Binding(
+                                    get: { userDataUpload.drivinglicense ?? "" },
+                                    set: { userDataUpload.drivinglicense = $0 }
+                                ))
+
                                     .frame(width: 120,height: 25)
                                     .font(.system(size: 12))
                                     .padding(.vertical, 2)
@@ -203,7 +261,7 @@ struct ProfileChangeView: View {
                                 }) {
                                     Image(uiImage: selectedFileURL_DL != nil ? UIImage(systemName: "doc")! : UIImage(named: "FileUpload_button")!)
                                         .resizable()
-                                        
+                                    
                                 }
                                 .frame(width: 120,height: 30)
                                 .background(Color(UIColor(hex: "#EF7C1F")))
@@ -221,7 +279,7 @@ struct ProfileChangeView: View {
                         HStack {
                             Spacer()
                             Button(action: {
-                                
+                                saveData()
                             }) {
                                 Text("save")
                                     .font(.system(size: 12))
@@ -241,9 +299,38 @@ struct ProfileChangeView: View {
                     
                 }
             }
-        }.navigationBarBackButtonHidden()
+        }
+        .navigationBarBackButtonHidden()
+        .onAppear {
+            viewModel.fetchUserData()
+        }
+    }
+    private func saveData() {
+        AuthService.UploadUserData(userProfile: userDataUpload) { result in
+            switch result {
+            case .success(let data):
+                if let data = data {
+                    print("Response data: \(String(data: data, encoding: .utf8) ?? "")")
+                    // Handle response data if needed
+                }
+            case .failure(let error):
+                print("Error: \(error.localizedDescription)")
+                // Handle error
+            }
+        }
+    }
+    func parseDate(from dateString: String) -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        return dateFormatter.date(from: dateString)
     }
     
+    // Function to format the date
+    func formatDate(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        return dateFormatter.string(from: date)
+    }
 }
 
 struct ProfileDetailsButtons: View {
@@ -283,18 +370,22 @@ struct ProfileDetailsButtons: View {
 struct ImagePicker: UIViewControllerRepresentable {
     @Binding var selectedImage: Image?
     @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) var dismiss
+    
+    func makeCoordinator() -> Coordinator {
+        return Coordinator(parent: self)
+    }
     
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let picker = UIImagePickerController()
         picker.delegate = context.coordinator
+        picker.sourceType = .photoLibrary
         return picker
     }
     
     func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
     
-    func makeCoordinator() -> Coordinator {
-        return Coordinator(parent: self)
-    }
+    
     
     class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
         let parent: ImagePicker
@@ -304,10 +395,25 @@ struct ImagePicker: UIViewControllerRepresentable {
         }
         
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-            if let uiImage = info[.originalImage] as? UIImage {
-                parent.selectedImage = Image(uiImage: uiImage)
+            if let image = info[.originalImage] as? UIImage {
+                parent.selectedImage = Image(uiImage: image)
+                
+                // Call uploadImageToBackend method from AuthService
+                AuthService.shared.uploadImageToBackend(image: image) { success in
+                    if success {
+                        print("Image uploaded successfully!")
+                    } else {
+                        print("Failed to upload image.")
+                    }
+                }
             }
-            parent.presentationMode.wrappedValue.dismiss()
+            picker.dismiss(animated: true)
+            parent.dismiss()
+        }
+        
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+            picker.dismiss(animated: true)
+            parent.dismiss()
         }
     }
 }

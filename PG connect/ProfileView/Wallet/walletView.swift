@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct walletView: View {
-    @State var balance: Int = 0
+    @ObservedObject var viewModel = AuthService.shared
     @State var BookingAmount: Int = 50
     @State var BookingDate: String = "12-12-2023 10:20PM"
     @Environment(\.dismiss) var dismiss
@@ -46,7 +46,7 @@ struct walletView: View {
                             .shadow(color: Color.gray.opacity(0.5), radius: 2, x: 0, y: 0)
                             .overlay (
                                 VStack(spacing: 15) {
-                                    Text("₹\(balance)")
+                                    Text("₹\(viewModel.walletResponse?.wallet.balance ?? 10)") // Display the balance
                                         .fontWeight(.semibold)
                                         .foregroundColor(Color(UIColor(hex: "#7F32CD")))
                                         .font(.system(size: 18))
@@ -82,11 +82,11 @@ struct walletView: View {
                                 HStack {
                                     VStack(alignment: .listRowSeparatorLeading, spacing: 5){
                                         
-                                        Text("Booking Amount: ₹\(BookingAmount)")
+                                        Text("Booking Amount: ₹\(viewModel.walletResponse?.wallet.transactions.first?.amount ?? 0)")
                                             .fontWeight(.medium)
                                             .foregroundStyle(Color.black)
                                             .font(.system(size: 12))
-                                        Text(BookingDate)
+                                        Text(viewModel.walletResponse?.wallet.transactions.first?.date ?? "")
                                             .foregroundStyle(Color.black)
                                             .font(.system(size: 12))
                                         
@@ -103,7 +103,11 @@ struct walletView: View {
                     }
                 }
             }.background(Color(.systemGray6))
-        }.navigationBarBackButtonHidden()
+        }
+        .navigationBarBackButtonHidden()
+            .onAppear {
+                        viewModel.fetchWalletData()
+                    }
     }
 }
 

@@ -36,12 +36,12 @@ struct DayShiftSheet: View {
                     .padding(.top, 15)
                 Spacer()
             }
-
+            
             Rectangle()
                 .foregroundStyle(Color(uiColor: .systemGray5))
                 .frame(height: 2)
                 .padding(.top, 5)
-        
+            
             
             //shift part
             HStack { Text("Working shift").bold() .font(.system(size: 14))
@@ -75,7 +75,7 @@ struct DayShiftSheet: View {
             HStack { Text("Working Days").bold() .font(.system(size: 14))
                 Spacer()
             }.padding(.leading).padding(.top, 5)
-
+            
             VStack {
                 ForEach(0..<daysGroup.count / buttonsPerRow + 1) { rowIndex in
                     HStack(spacing: 14) {
@@ -146,21 +146,61 @@ struct DayShiftSheet: View {
                 }.frame(height: 30)
                 Button(action: {
                     
-                    /* ******
-                     
-                     Error: You have to do -> selectedPreferences = [] to add more buttons
-                     
-                     ******  */
-                    
                     selectedPreferences = []
-                    let newAgePreferences = ShiftGroup.enumerated().compactMap { index, age in
-                        selectedIndex_Shift == index ? age : nil
-                    }
-                    selectedPreferences = newAgePreferences
-                    
+                    var selectedDays: [String] = []
                     for index in selectedIndices_days {
-                        selectedPreferences.append(daysGroup[index])
+                        selectedDays.append(daysGroup[index])
                     }
+                    
+                    // Update working days in UserProfile2
+                    let workingDays = WorkingDays_user(
+                        monday: selectedDays.contains("Mon"),
+                        tuesday: selectedDays.contains("Tue"),
+                        wednesday: selectedDays.contains("Wed"),
+                        thursday: selectedDays.contains("Thu"),
+                        friday: selectedDays.contains("Fri"),
+                        saturday: selectedDays.contains("Sat"),
+                        sunday: selectedDays.contains("Sun")
+                    )
+                    
+                    if let selectedIndex_Shift = selectedIndex_Shift {
+                        switch selectedIndex_Shift {
+                        case 0:
+                            self.selectedPreferences = ["Day"]
+                        case 1:
+                            self.selectedPreferences = ["Night"]
+                        case 2:
+                            self.selectedPreferences = ["Rotational"]
+                        default:
+                            self.selectedPreferences = []
+                        }
+                    }
+                    let userProfile = UserProfile2(
+                        
+                        officehoursstart: dateFormatter.string(from: startTime),
+                        officehoursend: dateFormatter.string(from: endTime),
+                        shift: selectedPreferences.first ?? "",
+                        workingdays: workingDays
+                        
+                    )
+                    AuthService.UploadUserData(userProfile: userProfile) { result in
+                        switch result {
+                        case .success(let data):
+                            if let responseData = data {
+                                // Upload successful, handle response data if needed
+                                print("Upload Days successful")
+                            } else {
+                                // Upload successful, but no response data
+                                print("Upload Days successful, but no response data")
+                            }
+                        case .failure(let error):
+                            // Upload failed, handle the error
+                            print("Upload failed with error: \(error.localizedDescription)")
+                        }
+                    }
+                    
+                    
+                    
                     
                     dismiss()
                 }) {

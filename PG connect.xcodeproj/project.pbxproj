@@ -25,6 +25,7 @@
 		373EB7EC2B9CC7A7007D54DF /* Rules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373EB7EB2B9CC7A7007D54DF /* Rules.swift */; };
 		373EFEB42BA3F690004D12B2 /* ProfileEditPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373EFEB32BA3F690004D12B2 /* ProfileEditPage.swift */; };
 		374242062BAAA447005304C8 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 374242052BAAA447005304C8 /* MessageUI.framework */; };
+		3757941D2BBC75F600813828 /* UserProfileData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3757941C2BBC75F600813828 /* UserProfileData.swift */; };
 		377756E32BA7E24F009AC031 /* ProfileChangeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377756E22BA7E24F009AC031 /* ProfileChangeView.swift */; };
 		377BC2612B9CA55000BC1E9C /* Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377BC2602B9CA55000BC1E9C /* Map.swift */; };
 		379764F82BA0A936004E1FE9 /* BookingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 379764F72BA0A935004E1FE9 /* BookingView.swift */; };
@@ -71,7 +72,12 @@
 		37DA16332BA9D87A00FE5650 /* walletView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DA16322BA9D87A00FE5650 /* walletView.swift */; };
 		37DA16372BA9EF2A00FE5650 /* MyBookingsView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DA16362BA9EF2A00FE5650 /* MyBookingsView2.swift */; };
 		37DA16392BA9F3AE00FE5650 /* RentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DA16382BA9F3AE00FE5650 /* RentView.swift */; };
+		37E129842BBE469400B3DCD1 /* UserProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E129832BBE469400B3DCD1 /* UserProfileModel.swift */; };
+		37E129862BC05BA700B3DCD1 /* RentDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E129852BC05BA600B3DCD1 /* RentDataModel.swift */; };
+		37E129882BC05C9E00B3DCD1 /* WalletDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E129872BC05C9E00B3DCD1 /* WalletDataModel.swift */; };
 		37E61A992BB93D1600454421 /* URLImage in Frameworks */ = {isa = PBXBuildFile; productRef = 37E61A982BB93D1600454421 /* URLImage */; };
+		37E61A9B2BB9BEBA00454421 /* PGDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E61A9A2BB9BEBA00454421 /* PGDataModel.swift */; };
+		37E61A9D2BB9C12F00454421 /* PGdata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E61A9C2BB9C12F00454421 /* PGdata.swift */; };
 		37F085312B977D9700CE6500 /* PG_GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F085302B977D9700CE6500 /* PG_GridView.swift */; };
 		37F085332B9790FC00CE6500 /* Horizontal_ButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F085322B9790FC00CE6500 /* Horizontal_ButtonView.swift */; };
 		37FEE7442BA2178B009594C4 /* DropdownMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37FEE7432BA2178B009594C4 /* DropdownMenu.swift */; };
@@ -113,6 +119,7 @@
 		373EB7EB2B9CC7A7007D54DF /* Rules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rules.swift; sourceTree = "<group>"; };
 		373EFEB32BA3F690004D12B2 /* ProfileEditPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditPage.swift; sourceTree = "<group>"; };
 		374242052BAAA447005304C8 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		3757941C2BBC75F600813828 /* UserProfileData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileData.swift; sourceTree = "<group>"; };
 		377756E22BA7E24F009AC031 /* ProfileChangeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileChangeView.swift; sourceTree = "<group>"; };
 		377BC2602B9CA55000BC1E9C /* Map.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Map.swift; sourceTree = "<group>"; };
 		379764F72BA0A935004E1FE9 /* BookingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingView.swift; sourceTree = "<group>"; };
@@ -162,6 +169,11 @@
 		37DA16322BA9D87A00FE5650 /* walletView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = walletView.swift; sourceTree = "<group>"; };
 		37DA16362BA9EF2A00FE5650 /* MyBookingsView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBookingsView2.swift; sourceTree = "<group>"; };
 		37DA16382BA9F3AE00FE5650 /* RentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RentView.swift; sourceTree = "<group>"; };
+		37E129832BBE469400B3DCD1 /* UserProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileModel.swift; sourceTree = "<group>"; };
+		37E129852BC05BA600B3DCD1 /* RentDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RentDataModel.swift; sourceTree = "<group>"; };
+		37E129872BC05C9E00B3DCD1 /* WalletDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletDataModel.swift; sourceTree = "<group>"; };
+		37E61A9A2BB9BEBA00454421 /* PGDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PGDataModel.swift; sourceTree = "<group>"; };
+		37E61A9C2BB9C12F00454421 /* PGdata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PGdata.swift; sourceTree = "<group>"; };
 		37F085302B977D9700CE6500 /* PG_GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PG_GridView.swift; sourceTree = "<group>"; };
 		37F085322B9790FC00CE6500 /* Horizontal_ButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Horizontal_ButtonView.swift; sourceTree = "<group>"; };
 		37FEE7432BA2178B009594C4 /* DropdownMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownMenu.swift; sourceTree = "<group>"; };
@@ -253,6 +265,7 @@
 			children = (
 				37F085322B9790FC00CE6500 /* Horizontal_ButtonView.swift */,
 				37F085302B977D9700CE6500 /* PG_GridView.swift */,
+				37E61A9E2BB9C27E00454421 /* PG DataModels */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -273,6 +286,14 @@
 				374242052BAAA447005304C8 /* MessageUI.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3757941B2BBC75C900813828 /* ProfileDataModel */ = {
+			isa = PBXGroup;
+			children = (
+				3757941C2BBC75F600813828 /* UserProfileData.swift */,
+			);
+			path = ProfileDataModel;
 			sourceTree = "<group>";
 		};
 		377756E12BA7E223009AC031 /* ProfileChangeView */ = {
@@ -329,6 +350,7 @@
 				37BBC0B22B961DBC00A7D2A1 /* MyPGView */,
 				37BBC0B32B961DDD00A7D2A1 /* ExpencesView */,
 				37BBC0B42B961DF100A7D2A1 /* ProfileView */,
+				3757941B2BBC75C900813828 /* ProfileDataModel */,
 				37BBC0522B9369E100BC10A1 /* Extension */,
 				373B960D2B98288400DB23A1 /* Garbage Code */,
 				37BBC02B2B93659500BC10A1 /* Assets.xcassets */,
@@ -449,6 +471,7 @@
 			children = (
 				37BBC0BB2B961E5600A7D2A1 /* ProfileView.swift */,
 				373EFEB22BA3F661004D12B2 /* ProfileViews */,
+				37E129822BBE467000B3DCD1 /* ProfileDataModels */,
 				37DA162C2BA9CFDF00FE5650 /* RentViews */,
 				37DA162D2BA9CFED00FE5650 /* BookingsViews */,
 				37DA162F2BA9D00100FE5650 /* Wallet */,
@@ -551,6 +574,7 @@
 			isa = PBXGroup;
 			children = (
 				37DA16382BA9F3AE00FE5650 /* RentView.swift */,
+				37E129852BC05BA600B3DCD1 /* RentDataModel.swift */,
 			);
 			path = RentViews;
 			sourceTree = "<group>";
@@ -575,8 +599,26 @@
 			isa = PBXGroup;
 			children = (
 				37DA16322BA9D87A00FE5650 /* walletView.swift */,
+				37E129872BC05C9E00B3DCD1 /* WalletDataModel.swift */,
 			);
 			path = Wallet;
+			sourceTree = "<group>";
+		};
+		37E129822BBE467000B3DCD1 /* ProfileDataModels */ = {
+			isa = PBXGroup;
+			children = (
+				37E129832BBE469400B3DCD1 /* UserProfileModel.swift */,
+			);
+			path = ProfileDataModels;
+			sourceTree = "<group>";
+		};
+		37E61A9E2BB9C27E00454421 /* PG DataModels */ = {
+			isa = PBXGroup;
+			children = (
+				37E61A9C2BB9C12F00454421 /* PGdata.swift */,
+				37E61A9A2BB9BEBA00454421 /* PGDataModel.swift */,
+			);
+			path = "PG DataModels";
 			sourceTree = "<group>";
 		};
 		37FEE7422BA21766009594C4 /* Bottom_buttons */ = {
@@ -741,17 +783,22 @@
 				37BBC0562B9372DC00BC10A1 /* WelcomeBox.swift in Sources */,
 				377BC2612B9CA55000BC1E9C /* Map.swift in Sources */,
 				37BBC0B62B961E3100A7D2A1 /* HomeSearchView.swift in Sources */,
+				37E61A9D2BB9C12F00454421 /* PGdata.swift in Sources */,
 				373B960F2B98289F00DB23A1 /* garbage.swift in Sources */,
 				373EFEB42BA3F690004D12B2 /* ProfileEditPage.swift in Sources */,
 				37BC0F4B2B9AD43700B37EAC /* ImageSlideView.swift in Sources */,
 				37BC0F562B9B358B00B37EAC /* Amenities.swift in Sources */,
+				37E129842BBE469400B3DCD1 /* UserProfileModel.swift in Sources */,
 				373213612B9DF9A7004AF84C /* GridButtons.swift in Sources */,
+				37E129882BC05C9E00B3DCD1 /* WalletDataModel.swift in Sources */,
 				37FEE7442BA2178B009594C4 /* DropdownMenu.swift in Sources */,
 				37BBC0592B93745E00BC10A1 /* ContentView.swift in Sources */,
 				37DA16332BA9D87A00FE5650 /* walletView.swift in Sources */,
 				371F8BC22BB08176007EE6DD /* AddExpensesSheet.swift in Sources */,
 				37C8BADB2BAEBB180041D55C /* SkipSheet.swift in Sources */,
+				37E129862BC05BA700B3DCD1 /* RentDataModel.swift in Sources */,
 				37BBC0542B9369FB00BC10A1 /* Extension.swift in Sources */,
+				3757941D2BBC75F600813828 /* UserProfileData.swift in Sources */,
 				37AE93402B942F9500E0159C /* TextFieldsSignIN.swift in Sources */,
 				377756E32BA7E24F009AC031 /* ProfileChangeView.swift in Sources */,
 				37D5DA4B2BB67365002A859A /* AuthService.swift in Sources */,
@@ -781,6 +828,7 @@
 				371F8BB92BB05D3A007EE6DD /* AddGroupSheet.swift in Sources */,
 				37BC0F512B9AF02900B37EAC /* Daily_btnsView.swift in Sources */,
 				379764F82BA0A936004E1FE9 /* BookingView.swift in Sources */,
+				37E61A9B2BB9BEBA00454421 /* PGDataModel.swift in Sources */,
 				37C8BADD2BAEF9390041D55C /* MyRoomView.swift in Sources */,
 				37BBC05D2B938C5300BC10A1 /* OrangeBox.swift in Sources */,
 				37BBC0BE2B961EA000A7D2A1 /* BottomTabView.swift in Sources */,

@@ -206,10 +206,10 @@
 //    // MARK: Universal Gesture State
 //    @Environment(\.isDragging) var isDragging
 //    @State var reset: Bool = false
-//    
+//
 //    @State var isHostelViewPresented = false
 //    @State var selectedFitness: Fitness? // Track the selected fitness item
-//    
+//
 //    var body: some View {
 //        GeometryReader{geometry in
 //            let safeAreaTop = geometry.safeAreaInsets.top
@@ -220,14 +220,14 @@
 //                            // Present Hostel View
 //                            HostelView(fitness: selectedFitness!, isHostelViewPresented: $isHostelViewPresented)
 //                                .edgesIgnoringSafeArea(.all)
-//                            
-//                            
+//
+//
 //                        } else {
 //                            // Show Header and Grid Views
 //                            HeaderView(safeAreaTop)
 //                                .offset(y: -offsetY)
 //                                .zIndex(1)
-//                            
+//
 //                            VStack {
 //                                Horizontal_ButtonView()
 //                                PG_GridView(selectedFitness: $selectedFitness, isHostelViewPresented: $isHostelViewPresented)
@@ -243,7 +243,7 @@
 //                            withAnimation(.none){
 //                                showSearchBar = (-offset > 80) && showSearchBar
 //                            }
-//                            
+//
 //                            if !isDragging && -offsetY < 80{
 //                                if !reset{
 //                                    reset = true
@@ -269,7 +269,7 @@
 //            .edgesIgnoringSafeArea(.top)
 //        }
 //    }
-//    
+//
 //    // MARK: Header View
 //    @ViewBuilder
 //    func HeaderView(_ safeAreaTop: CGFloat)->some View{
@@ -277,7 +277,7 @@
 //        let progress = -(offsetY / 80) > 1 ? -1 : (offsetY > 0 ? 0 : (offsetY / 80))
 //        VStack(spacing: 15){
 //            HStack(spacing: 15){
-//                
+//
 //                Rectangle()
 //                    .frame(width: 140,height: 30)
 //                    .foregroundColor(Color(UIColor(hex: "#7F32CD")))
@@ -298,29 +298,29 @@
 //                                .frame(width: 14, height: 9)
 //                        }
 //                    )
-//                
+//
 //                Spacer(minLength: 0)
-//                
+//
 //                Button(action: {
-//                    
+//
 //                }) {
-//                    
+//
 //                    Image(uiImage: UIImage(named: "bell_icon")!)
 //                        .resizable()
 //                        .frame(width: 30, height: 30)
 //                }
-//                
+//
 //                Button(action: {
-//                    
+//
 //                }) {
-//                    
+//
 //                    Image(uiImage: UIImage(named: "message_icon")!)
 //                        .resizable()
 //                        .frame(width: 25, height: 22)
-//                    
+//
 //                }.padding(.leading)
 //            }.opacity(showSearchBar ? 1 : 1 + progress)
-//            
+//
 //            VStack {
 //                HStack {
 //                    ZStack {
@@ -361,7 +361,7 @@
 //            // MARK: Moving Up When Scrolling Started
 //                .offset(y: progress * 65)
 //                .opacity(showSearchBar ? 0 : 1)
-//            
+//
 //        }
 //        .animation(.easeInOut(duration: 0.2), value: showSearchBar)
 //        .environment(\.colorScheme, .dark)
@@ -381,12 +381,12 @@
 //
 //struct HeaderView: View {
 //    var body : some View{
-//        
+//
 //        VStack {
-//            
-//            
+//
+//
 //            HStack{
-//                
+//
 //                Rectangle()
 //                    .frame(width: 140,height: 30)
 //                    .foregroundColor(Color(UIColor(hex: "#7F32CD")))
@@ -407,30 +407,30 @@
 //                                .frame(width: 14, height: 9)
 //                        }
 //                    )
-//                
+//
 //                Spacer(minLength: 0)
-//                
+//
 //                Button(action: {
-//                    
+//
 //                }) {
-//                    
+//
 //                    Image(uiImage: UIImage(named: "bell_icon")!)
 //                        .resizable()
 //                        .frame(width: 30, height: 30)
 //                }
-//                
+//
 //                Button(action: {
-//                    
+//
 //                }) {
-//                    
+//
 //                    Image(uiImage: UIImage(named: "message_icon")!)
 //                        .resizable()
 //                        .frame(width: 25, height: 22)
-//                    
+//
 //                }.padding(.leading)
 //            }.padding(.bottom, 10)
-//            
-//            
+//
+//
 //            HStack {
 //                ZStack {
 //                    Rectangle()
@@ -453,7 +453,7 @@
 //                            .frame(width: 18, height: 18)
 //                    )
 //            }.padding(.bottom, 5)
-//            
+//
 //            HStack {
 //                Text("Roommate Search")   //Location Name
 //                    .foregroundStyle(Color.white)
@@ -466,14 +466,14 @@
 //                    .frame(width: 14, height: 9)
 //                Spacer()
 //            }.padding(.bottom, 20)
-//            
-//            
+//
+//
 //        }.padding(.horizontal)
 //            .padding(.top, (UIApplication.shared.windows.first?.safeAreaInsets.top)! + 10)
 //            .background(Color(UIColor(hex: "#7F32CD")))
 //            .cornerRadius(17)
 //    }
-//    
+//
 //}
 //
 //
@@ -481,11 +481,11 @@
 //    @State private var selectedIndex: Int? = 0
 //    let buttonNames = ["Near By", "Trending", "Corporate", "Value for Money"]
 //    var body : some View{
-//        
+//
 //        ScrollView(.horizontal, showsIndicators: false) {
 //            HStack(spacing: 15) {
 //                ForEach(0..<buttonNames.count) { index in
-//                    
+//
 //                    if index == 0 {
 //                        HStack(spacing: 1){
 //                            Image(uiImage: UIImage(named: "target_icon")!)
@@ -494,13 +494,13 @@
 //                                .imageScale(.large)
 //                                .frame(width: 20, height: 20)
 //                                .foregroundColor(self.selectedIndex == 0 ? .white : Color(UIColor(hex: "#F25621")))
-//                            
+//
 //                            Button(action: {
 //                                self.selectedIndex = 0
 //                            }) {
 //                                Text(buttonNames[index])
 //                                    .foregroundColor(self.selectedIndex == 0 ? .white : Color(UIColor(hex: "#F25621")))
-//                                
+//
 //                            }
 //                        }
 //                        .padding(.horizontal, 12)
@@ -509,7 +509,7 @@
 //                        .cornerRadius(10)
 //                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(lineWidth: 2).foregroundColor(Color(UIColor(hex: "#F25621"))))
 //                    } else {
-//                        
+//
 //                        Button(action: {
 //                            self.selectedIndex = index
 //                        }) {
@@ -520,17 +520,17 @@
 //                                .background(self.selectedIndex == index ? Color(UIColor(hex: "#F25621")) : Color.white)
 //                                .cornerRadius(10)
 //                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(lineWidth: 2).foregroundColor(Color(UIColor(hex: "#F25621"))))
-//                            
+//
 //                        }
 //                    }
-//                    
+//
 //                }
 //            }.padding(.leading, 10)
 //        }
 //        .padding(.top, 10)
 //        .background(Color(.systemGray6))
 //    }
-//    
+//
 //}
 //
 //
@@ -538,9 +538,9 @@
 //    @Binding var selectedFitness: Fitness?
 //    @Binding var isHostelViewPresented: Bool
 //    @State var index = 0
-//    
+//
 //    var body: some View{
-//        
+//
 //        GeometryReader { geometry in
 //            GridView(fitness_Data: fit_Data, availableHeight: geometry.size.height, selectedFitness: $selectedFitness, isHostelViewPresented: $isHostelViewPresented) // Pass the binding
 //        }
@@ -550,31 +550,31 @@
 //// Grid View....
 //
 //struct GridView : View {
-//    
+//
 //    var fitness_Data : [Fitness]
 //    var columns = Array(repeating: GridItem(.flexible(), spacing: 10), count: 2)
 //    var availableHeight: CGFloat
 //    @State private var isShowingHostelView = false
 //    @Binding var selectedFitness: Fitness?
 //    @Binding var isHostelViewPresented: Bool
-//    
+//
 //    var body: some View{
-//        
+//
 //        NavigationView {
 //            ScrollView {
 //                LazyVGrid(columns: columns,spacing: 10){
-//                    
+//
 //                    ForEach(fitness_Data){ fitness in
 //                        NavigationLink(destination: EmptyView()) {
 //                            ZStack(alignment: Alignment(horizontal: .trailing, vertical: .top)) {
-//                                
+//
 //                                VStack {
-//                                    
+//
 //                                    Image(fitness.image)
 //                                        .resizable()
 //                                        .frame(width: .infinity, height: 150)
-//                                    
-//                                    
+//
+//
 //                                    VStack(spacing: 0) {
 //                                        // 1st row
 //                                        HStack {
@@ -600,7 +600,7 @@
 //                                            }
 //                                            Spacer()
 //                                        }.padding(.bottom, 10)
-//                                        
+//
 //                                        HStack {
 //                                            HStack(spacing: 2) {
 //                                                Text("Avialable: ")
@@ -611,7 +611,7 @@
 //                                            }
 //                                            Spacer()
 //                                        }.padding(.bottom, 7)
-//                                        
+//
 //                                        HStack {
 //                                            HStack(spacing: 2) {
 //                                                Text("Starts from: ")
@@ -630,13 +630,13 @@
 //                                .onTapGesture {
 //                                    selectedFitness = fitness
 //                                    isHostelViewPresented = true
-//                                    
+//
 //                                }
 //                            }
 //                        }
 //                        .buttonStyle(PlainButtonStyle())
-//                        
-//                        
+//
+//
 //                    }
 //                }
 //                .frame(minHeight: availableHeight)
@@ -650,7 +650,7 @@
 //// DashBoard Grid Model Data...
 //
 //struct Fitness : Identifiable {
-//    
+//
 //    var id : Int
 //    var title : String
 //    var location : String
@@ -662,34 +662,34 @@
 //// Daily Data...
 //
 //var fit_Data = [
-//    
+//
 //    Fitness(id: 0, title: "One hostel", location: "Hyderabad", image: "room_image", price: "₹2500", avilable_for: "Daily"),
-//    
+//
 //    Fitness(id: 1, title: "two hostel", location: "Hyderabad", image: "room_image", price: "₹2500", avilable_for: "Daily"),
-//    
+//
 //    Fitness(id: 2, title: "One hostel", location: "Hyderabad", image: "room_image", price: "₹2500", avilable_for: "Daily"),
-//    
+//
 //    Fitness(id: 3, title: "One hostel", location: "Hyderabad", image: "room_image", price: "₹2500", avilable_for: "Daily"),
-//    
+//
 //    Fitness(id: 4, title: "One hostel", location: "Hyderabad", image: "room_image", price: "₹2500", avilable_for: "Daily"),
-//    
+//
 //    Fitness(id: 5, title: "One hostel", location: "Hyderabad", image: "room_image", price: "₹2500", avilable_for: "Daily"),
-//    
+//
 //    Fitness(id: 6, title: "One hostel", location: "Hyderabad", image: "room_image", price: "₹2500", avilable_for: "Daily"),
-//    
+//
 //    Fitness(id: 7, title: "One hostel", location: "Hyderabad", image: "room_image", price: "₹2500", avilable_for: "Daily"),
-//    
+//
 //]
 //
 //
 //struct HostelView: View {
 //    var fitness: Fitness
 //    @Binding var isHostelViewPresented: Bool // Binding to control presentation
-//    
+//
 //    var body: some View {
-//        
+//
 //        VStack {
-//            
+//
 //            ZStack(alignment: .center) {
 //                Button {
 //                    isHostelViewPresented = false
@@ -708,11 +708,11 @@
 //                    .font(.system(size: 20))
 //                    .fontWeight(.medium)
 //                    .foregroundStyle(Color.black)
-//                    
+//
 //            }
-//            
-//           
-//            
+//
+//
+//
 //            Text(fitness.title)
 //                .font(.system(size: 14))
 //        }
@@ -967,9 +967,9 @@
 //import SwiftUI
 //
 //struct ContentView: View {
-//    
+//
 //    @State var selection1: String? = nil
-//    
+//
 //    var body: some View {
 //        VStack {
 //                    Text("Some content here")
@@ -982,7 +982,7 @@
 //
 //struct AnotherView: View {
 //    @State var selection2: String? = nil
-//    
+//
 //    var body: some View {
 //        // Use dropDownPicker modifier here
 //        Text("Some other content")
@@ -995,35 +995,35 @@
 //}
 //
 //struct DropDownPicker: View {
-//    
+//
 //    @Binding var selection: String?
 //    var state: DropDownPickerState = .bottom
 //    var options: [String]
 //    var maxWidth: CGFloat = 180
-//    
+//
 //    @State var showDropdown = false
-//    
+//
 //    @SceneStorage("drop_down_zindex") private var index = 1000.0
 //    @State var zindex = 1000.0
-//    
+//
 //    var body: some View {
 //        GeometryReader {
 //            let size = $0.size
-//            
+//
 //            VStack(spacing: 0) {
-//                
-//                
+//
+//
 //                if state == .top && showDropdown {
 //                    OptionsView()
 //                }
-//                
+//
 //                HStack {
 //                    Text(selection == nil ? "Select" : selection!)
 //                        .foregroundColor(selection != nil ? .black : .gray)
-//                    
-//                    
+//
+//
 //                    Spacer(minLength: 0)
-//                    
+//
 //                    Image(systemName: state == .top ? "chevron.up" : "chevron.down")
 //                        .font(.title3)
 //                        .foregroundColor(.gray)
@@ -1041,7 +1041,7 @@
 //                    }
 //                }
 //                .zIndex(10)
-//                
+//
 //                if state == .bottom && showDropdown {
 //                    OptionsView()
 //                }
@@ -1054,13 +1054,13 @@
 //                    .stroke(.gray)
 //            }
 //            .frame(height: size.height, alignment: state == .top ? .bottom : .top)
-//            
+//
 //        }
 //        .frame(width: maxWidth, height: 50)
 //        .zIndex(zindex)
 //    }
-//    
-//    
+//
+//
 //    func OptionsView() -> some View {
 //        VStack(spacing: 0) {
 //            ForEach(options, id: \.self) { option in
@@ -1118,15 +1118,15 @@
 //        .frame(width: .infinity, height: 50)
 //        .foregroundColor(.white)
 //        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.gray, lineWidth: 1))
-//        
-//        
+//
+//
 //        .onTapGesture {
 //            self.isFirstRectangleVisible = false
 //            self.isFirstRectangleVisible2 = true
 //        }
-//    
-    
-    
+//
+
+
 //}
 
 //
@@ -1148,7 +1148,7 @@
 //                    .cornerRadius(10)
 //            }
 //            .padding()
-//            
+//
 //            if isTimePickerPresented {
 //                VStack {
 //                    Spacer()
@@ -1156,7 +1156,7 @@
 //                        .datePickerStyle(WheelDatePickerStyle())
 //                        .labelsHidden()
 //                        .padding()
-//                    
+//
 //                    Button(action: {
 //                        isTimePickerPresented.toggle()
 //                    }) {
@@ -1191,13 +1191,13 @@
 //            errorMessage = "Please enter both email and password"
 //            return
 //        }
-//        
+//
 //        // Prepare your API request
 //        let url = URL(string: "https://production.pgplanner.in/api/login/user")!
 //        var request = URLRequest(url: url)
 //        request.httpMethod = "POST"
 //        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-//        
+//
 //        // Prepare request body
 //        let requestBody: [String: Any] = ["email": email, "password": password]
 //        guard let jsonData = try? JSONSerialization.data(withJSONObject: requestBody) else {
@@ -1205,7 +1205,7 @@
 //            return
 //        }
 //        request.httpBody = jsonData
-//        
+//
 //        // Make the request
 //        URLSession.shared.dataTask(with: request) { data, response, error in
 //            // Handle response
@@ -1216,10 +1216,10 @@
 //                    if let token = parseBearerToken(from: data) {
 //                        // Save the token for later use
 //                        UserDefaults.standard.set(token, forKey: "bearerToken")
-//                        
+//
 //                        // Proceed with uploading device token
 //                        uploadDeviceToken(token: token)
-//                        
+//
 //                        // Proceed with further actions or navigation
 //                        DispatchQueue.main.async {
 //                            // Navigate to the next screen or update UI
@@ -1242,7 +1242,7 @@
 //            }
 //        }.resume()
 //    }
-//    
+//
 //private func parseBearerToken(from data: Data) -> String? {
 //    do {
 //        // Try to parse JSON response
@@ -1250,12 +1250,12 @@
 //           let token = json["token"] as? String {
 //            return token
 //        }
-//        
+//
 //        // Try to parse plain text response
 //        if let token = String(data: data, encoding: .utf8) {
 //            return token
 //        }
-//        
+//
 //        print("Error: Unable to parse Bearer Token from response")
 //        return nil
 //    } catch {
@@ -1264,22 +1264,22 @@
 //    }
 //}
 //
-//    
+//
 //    func uploadDeviceToken(token: String) {
 //        // Prepare your API request to upload device token
 //        let url = URL(string: "https://production.pgplanner.in/api/login/userdevicetoken")!
 //        var request = URLRequest(url: url)
 //        request.httpMethod = "POST"
 //        request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-//        
+//
 //        // Add Bearer Token to request headers
 //        let bearerToken = token
 //        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
-//        
+//
 //        // Prepare request body
 //        let requestBody = "devicetoken=\(token)"
 //        request.httpBody = requestBody.data(using: .utf8)
-//        
+//
 //        // Make the request to upload device token
 //        URLSession.shared.dataTask(with: request) { data, response, error in
 //            // Handle response
@@ -1314,13 +1314,13 @@
 //            errorMessage = "Please fill in all fields correctly"
 //            return
 //        }
-//        
+//
 //        // Prepare your API request
 //        let url = URL(string: "https://production.pgplanner.in/api/login/user")!
 //        var request = URLRequest(url: url)
 //        request.httpMethod = "POST"
 //        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-//        
+//
 //        // Prepare request body
 //        let requestBody: [String: Any] = ["email": email, "password": password]
 //        guard let jsonData = try? JSONSerialization.data(withJSONObject: requestBody) else {
@@ -1328,7 +1328,7 @@
 //            return
 //        }
 //        request.httpBody = jsonData
-//        
+//
 //        // Make the request
 //        URLSession.shared.dataTask(with: request) { data, response, error in
 //            // Handle response
@@ -1342,10 +1342,10 @@
 //                            print("Error: Unable to retrieve device token")
 //                            return
 //                        }
-//                        
+//
 //                        // Upload device token
 //                        uploadDeviceToken(token: deviceToken)
-//                        
+//
 //                        // Update UI or navigate to the next screen
 //                        if let window = UIApplication.shared.windows.first {
 //                            window.rootViewController = UIHostingController(rootView: BottomTabView())
@@ -1376,7 +1376,7 @@
 //            }
 //        }.resume()
 //    }
-//    
+//
 //    // Function to retrieve device token
 //    func getDeviceToken() -> String? {
 //        guard let deviceToken = UIDevice.current.identifierForVendor?.uuidString else {
@@ -1384,7 +1384,7 @@
 //        }
 //        return deviceToken
 //    }
-//    
+//
 //    // Function to upload device token
 //    func uploadDeviceToken(token: String) {
 //        // Prepare your API request
@@ -1392,12 +1392,12 @@
 //        var request = URLRequest(url: url)
 //        request.httpMethod = "POST"
 //        request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-//        
+//
 //        // Prepare request body
 //        let requestBody = "devicetoken=\(token)"
 //        print("******\(requestBody)")
 //        request.httpBody = requestBody.data(using: .utf8)
-//        
+//
 //        // Make the request
 //        URLSession.shared.dataTask(with: request) { data, response, error in
 //            // Handle response
@@ -1425,7 +1425,7 @@
 //
 //        var request = URLRequest(url: url)
 //        request.httpMethod = "GET"
-//        
+//
 //        // Fetch bearer token from AuthService
 //        if let bearerToken = AuthService.shared.getToken() {
 //            request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
@@ -1480,7 +1480,7 @@
 //            }
 //        }
 //    }
-//    
+//
 //    private func printPgData(_ pgData: [PgData]) {
 //        for pg in pgData {
 //            print("PG city: \(pg.City)")
@@ -1491,52 +1491,89 @@
 //}
 
 import SwiftUI
-import URLImage
 
-struct ContentView: View {
-    @ObservedObject var authService = AuthService()
-    @StateObject var viewModel = AuthService()
-    var body: some View {
-        PG_GridView()
-    }
-}
-struct ContentView7: View {
-    @ObservedObject var viewModel = AuthService()
-    
-    var body: some View {
-        ScrollView {
-            VStack(spacing: 10) {
-                ForEach(viewModel.pgData) { pg in
-                    VStack {
-                        if let firstImage = pg.images.first, let url = URL(string: firstImage.img) {
-                            if let imageData = try? Data(contentsOf: url), let uiImage = UIImage(data: imageData) {
-                                Image(uiImage: uiImage)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 100, height: 100)
-                                    .cornerRadius(10)
-                                    .shadow(radius: 5)
-                            } else {
-                                // Placeholder if image loading fails
-                                Image(systemName: "photo")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 100, height: 100)
-                                    .cornerRadius(10)
-                                    .shadow(radius: 5)
-                            }
-                            Text(pg.pgname)
-                                .font(.caption)
-                                .foregroundColor(.primary)
-                                .multilineTextAlignment(.center)
-                        }
-                    }
-                }
-            }
-            .padding()
-        }
-        .onAppear {
-            viewModel.fetchPGData()
-        }
-    }
-}
+//import SwiftUI
+//
+//struct ContentView: View {
+//    @State private var userProfile: UserProfileResponse?
+//    
+//    var body: some View {
+//        VStack {
+//            if let userProfile = userProfile {
+//                Text("Profile ID: \(userProfile.profileid)")
+//                Text("Name: \(userProfile.name)")
+//                Text("Email: \(userProfile.email)")
+//                Text("Phone: \(userProfile.phone)")
+//                // Add more properties as needed
+//            } else {
+//                Text("No user profile data available")
+//            }
+//            
+//            Button("Fetch Data") {
+//                
+//            }
+//            .padding()
+//        }
+//    }
+//    
+//    
+//}
+
+// Buttons
+//if !buttonNames.isEmpty  {
+//    VStack {
+//        ForEach(0..<buttonNames.count / buttonsPerRow + 1) { rowIndex in
+//            HStack(spacing: 14) {
+//                ForEach(0..<min(buttonsPerRow, buttonNames.count - rowIndex * buttonsPerRow)) { columnIndex in
+//                    let index = rowIndex * buttonsPerRow + columnIndex
+//                    
+//                    Text(buttonNames[index])
+//                        .frame(width: .infinity, height: 8)
+//                        .font(.system(size: 10))
+//                        .foregroundColor(.black)
+//                        .padding(.horizontal, 6)
+//                        .padding(.vertical, 6)
+//                        .background(Color.white)
+//                        .cornerRadius(15)
+//                        .overlay(RoundedRectangle(cornerRadius: 15).stroke(lineWidth: 1).foregroundColor(.gray))
+//                    
+//                }
+//                Spacer()
+//            }
+//        }
+//    }.padding(.top, 10).padding(.bottom, 20)
+//}
+//
+
+//let userProfile = UserProfile2(
+//    
+//    officehoursstart: dateFormatter.string(from: startTime),
+//    officehoursend: dateFormatter.string(from: endTime),
+//    
+//    shift: selectedPreferences.joined(separator: ", "),
+//    
+//    workingdays: WorkingDays_user(
+//        monday: selectedIndices_days.contains(0),
+//        tuesday: selectedIndices_days.contains(1),
+//        wednesday: selectedIndices_days.contains(2),
+//        thursday: selectedIndices_days.contains(3),
+//        friday: selectedIndices_days.contains(4),
+//        saturday: selectedIndices_days.contains(5),
+//        sunday: selectedIndices_days.contains(6)
+//    )
+//)
+//AuthService.UploadUserData(userProfile: userProfile) { result in
+//    switch result {
+//    case .success(let data):
+//        if let responseData = data {
+//            // Upload successful, handle response data if needed
+//            print("Upload Days successful")
+//        } else {
+//            // Upload successful, but no response data
+//            print("Upload Days successful, but no response data")
+//        }
+//    case .failure(let error):
+//        // Upload failed, handle the error
+//        print("Upload failed with error: \(error.localizedDescription)")
+//    }
+//}

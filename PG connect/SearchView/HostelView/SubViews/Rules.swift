@@ -8,28 +8,24 @@
 import SwiftUI
 
 struct Rules: View {
-    @State private var rules: [String] = [". Student must keep the Campus & Rooms, clean", ". Power bill separate"]
+    let rules: String
+    
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                Text("Nearby Places")
+                Text("Rules")
                     .font(.system(size: 12.5))
                     .bold()
                     .foregroundColor(Color.black)
                 Spacer()
-            }.padding(.top, 2).padding(.bottom, 12)
+            }.padding(.top, 2).padding(.bottom, 10)
             
-            ForEach(rules, id: \.self) { rule in
+            ForEach(rules.components(separatedBy: "\n"), id: \.self) { rule in
                 Text(rule)
-                    .font(.system(size: 11.5))
-                    .fontWeight(.medium)
+                    .font(.system(size: 12))
+                    .fontWeight(.semibold)
             }.padding(.top, 1).padding(.leading, 5)
-            
             
         }.padding(.leading)
     }
-}
-
-#Preview {
-    Rules()
 }

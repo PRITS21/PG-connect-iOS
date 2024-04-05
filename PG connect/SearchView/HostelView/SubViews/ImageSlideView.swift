@@ -7,36 +7,38 @@
 
 import SwiftUI
 
+struct ImageSliderView: View {
+    let imageUrls: [String]
 
-
-struct ImageSlideView: View {
-    var fitness: Fitness
     var body: some View {
-        
-            ImageSlider(images: fitness.images)
-                .frame(height: 165)
-                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                .cornerRadius(10)
-                .padding(.horizontal)
-        
-    }
-}
-
-struct ImageSlider: View {
-    let images: [String] // Array of image names
-    
-    var body: some View {
-        TabView {
-            ForEach(images, id: \.self) { item in
-                Image(item)
-                    .resizable()
-                    .scaledToFill()
+        if !imageUrls.isEmpty {
+            TabView {
+                ForEach(imageUrls, id: \.self) { imageUrl in
+                    AsyncImage(url: URL(string: imageUrl)) { phase in
+                        switch phase {
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .scaledToFill()
+                        case .failure:
+                            Image(systemName: "photo")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                        case .empty:
+                            ProgressView()
+                        @unknown default:
+                            EmptyView()
+                        }
+                    }
+                    .tag(imageUrl)
+                }
             }
+            .tabViewStyle(PageTabViewStyle())
+            .frame(height: 165)
+            .cornerRadius(10)
+            .padding(.horizontal)
+        } else {
+            Text("No images available")
         }
-        .tabViewStyle(PageTabViewStyle())
     }
-}
-let sampleFitness2 = Fitness(id: 0, pgname: "One Hostel", area: "Hyderabad", images: ["room_image 1", "room_image 2", "room_image 3"], startingfrom: "₹2500", roomavailability: "Daily")
-#Preview {
-    ImageSlideView(fitness: sampleFitness2)
 }

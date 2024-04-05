@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct RentView: View {
+    @ObservedObject var viewModel = AuthService.shared
     @Environment(\.dismiss) var dismiss
     @State private var Date: String = "12-12-23"
     @State private var Month: String = "Jan-23"
@@ -102,7 +103,11 @@ struct RentView: View {
                 
                 Spacer()
             }
-        }.navigationBarBackButtonHidden()
+        }
+        .navigationBarBackButtonHidden()
+        .onAppear {
+            viewModel.fetchRentTable()
+        }
     }
 }
 

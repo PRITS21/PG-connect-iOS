@@ -96,18 +96,35 @@ struct Languages_sheet: View {
                         .background(Color(.systemGray3))
                         .foregroundColor(.black)
                         .cornerRadius(5)
-                        
+                    
                 }.frame(height: 30)
                 Button(action: {
-                    let newAgePreferences = MotherToungeLang.enumerated().compactMap { index, age in
+                    let newMotherLangPreferences = MotherToungeLang.enumerated().compactMap { index, age in
                         selectedIndex_MoT == index ? age : nil
                     }
-                    selectedPreferences2 = newAgePreferences
                     
-                    let newTvPreferences = OthersLang.enumerated().compactMap { index, tv in
+                    let newOtherLangPreferences = OthersLang.enumerated().compactMap { index, tv in
                         selectedIndex_OthL == index ? tv : nil
                     }
-                    selectedPreferences2.append(contentsOf: newTvPreferences)
+                    selectedPreferences2 = newMotherLangPreferences + newOtherLangPreferences
+                    
+                    let userProfile = UserProfile2(languages: Languages_user(mothertongue: newMotherLangPreferences, secondary: newOtherLangPreferences))
+                     
+                     AuthService.UploadUserData(userProfile: userProfile) { result in
+                         switch result {
+                         case .success(let data):
+                             if let responseData = data {
+                                 // Upload successful, handle response data if needed
+                                 print("Upload language successful")
+                             } else {
+                                 // Upload successful, but no response data
+                                 print("Upload language successful, but no response data")
+                             }
+                         case .failure(let error):
+                             // Upload failed, handle the error
+                             print("Upload failed with error: \(error.localizedDescription)")
+                         }
+                     }
                     
                     dismiss()
                 }) {

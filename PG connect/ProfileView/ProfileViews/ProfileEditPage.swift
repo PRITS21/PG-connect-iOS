@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ProfileEditPage: View {
     @Environment(\.dismiss) var dismiss
+    @ObservedObject var viewModel = AuthService.shared
+    @State private var userProfile: UserProfileResponse?
     @State private var showPreferencesSheet = false
     @State private var showLanguagesSheet = false
     @State private var showWorkShiftSheet = false
@@ -44,10 +46,21 @@ struct ProfileEditPage: View {
                 //1st part
                 ScrollView {
                     VStack {
-                        Image(systemName: "person.circle.fill")
-                            .resizable()
-                            .frame(width: 100, height: 100)
-                        
+                        if let userProfile = viewModel.ProfileData {
+                            if let imageUrl = URL(string: userProfile.profileimage) {
+                                AsyncImage(url: imageUrl) { image in
+                                    image
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: 100, height: 100)
+                                        .clipShape(Circle())
+                                } placeholder: {
+                                    Image(systemName: "person.circle.fill")
+                                        .resizable()
+                                        .frame(width: 100, height: 100)
+                                }
+                            }
+                        }
                         NavigationLink(destination: ProfileChangeView()) {
                             Text("Edit Profile")
                                 .font(.system(size: 11))
@@ -66,10 +79,10 @@ struct ProfileEditPage: View {
                     
                     //3rd part
                     VStack( spacing: 0) {
-                        ProfileEditViewButtons(title: "Preferences", buttonNames: selectedPreferences1, isPresented: $showPreferencesSheet)
-                        ProfileEditViewButtons(title: "Languages", buttonNames: selectedPreferences2, isPresented: $showLanguagesSheet)
-                        ProfileEditViewButtons(title: "Work Shift / Days / Hours", buttonNames: selectedPreferences3, isPresented: $showWorkShiftSheet)
-                        ProfileEditViewButtons(title: "Food Type", buttonNames: selectedPreferences4, isPresented: $showFoodTypeSheet)
+                        ProfileEditViewButtons(title: "Preferences", isPresented: $showPreferencesSheet)
+                        ProfileEditViewButtons(title: "Languages", isPresented: $showLanguagesSheet)
+                        ProfileEditViewButtons(title: "Work Shift / Days / Hours", isPresented: $showWorkShiftSheet)
+                        ProfileEditViewButtons(title: "Food Type", isPresented: $showFoodTypeSheet)
                         
                     }
                     
@@ -103,15 +116,18 @@ struct ProfileEditPage: View {
             }
         }
         .navigationBarBackButtonHidden()
+        .onAppear{
+            viewModel.fetchUserData()
+        }
     }
 }
 
 
 struct ProfileEditViewButtons: View {
+    @ObservedObject var viewModel = AuthService.shared
     
     let buttonsPerRow = 5
     let title: String
-    let buttonNames: [String]
     @Binding var isPresented: Bool // Binding to determine if sheet is presented
     
     var body: some View {
@@ -131,38 +147,116 @@ struct ProfileEditViewButtons: View {
                 }
             }.padding(.top, 7)
             
-            // Buttons
-            if !buttonNames.isEmpty  {
-                VStack {
-                    ForEach(0..<buttonNames.count / buttonsPerRow + 1) { rowIndex in
-                        HStack(spacing: 14) {
-                            ForEach(0..<min(buttonsPerRow, buttonNames.count - rowIndex * buttonsPerRow)) { columnIndex in
-                                let index = rowIndex * buttonsPerRow + columnIndex
-                                
-                                Text(buttonNames[index])
-                                    .frame(width: .infinity, height: 8)
-                                    .font(.system(size: 10))
-                                    .foregroundColor(.black)
-                                    .padding(.horizontal, 6)
-                                    .padding(.vertical, 6)
-                                    .background(Color.white)
-                                    .cornerRadius(15)
-                                    .overlay(RoundedRectangle(cornerRadius: 15).stroke(lineWidth: 1).foregroundColor(.gray))
-                                
-                            }
-                            Spacer()
+            if let profileData = AuthService.shared.ProfileData {
+                if title == "Preferences" {
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 50))], spacing: 10) {
+                        ForEach(profileData.prefrences, id: \.self) { preference in
+                            Text(preference)
+                                .font(.system(size: 10))
+                                .foregroundColor(.black)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 6)
+                                .background(Color.white)
+                                .cornerRadius(15)
+                                .overlay(RoundedRectangle(cornerRadius: 15).stroke(lineWidth: 1).foregroundColor(.gray))
                         }
                     }
-                }.padding(.top, 10).padding(.bottom, 20)
+                    .padding(.vertical, 10)
+                }
+                else if title == "Languages" {
+                    let allLanguages = profileData.languages.mothertongue + profileData.languages.secondary
+                    
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 50))], spacing: 10) {
+                        ForEach(allLanguages, id: \.self) { language in
+                            Text(language)
+                                .font(.system(size: 10))
+                                .foregroundColor(.black)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 6)
+                                .background(Color.white)
+                                .cornerRadius(15)
+                                .overlay(RoundedRectangle(cornerRadius: 15).stroke(lineWidth: 1).foregroundColor(.gray))
+                        }
+                    }
+                    .padding(.vertical, 10)
+                }
+                else if title == "Work Shift / Days / Hours" {
+                    // Combine shift, office hours, and working days into a single array
+                    let combinedData = getCombinedData(profileData: profileData)
+                    
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 50))], spacing: 5) {
+                        ForEach(combinedData, id: \.self) { data in
+                            Text(data)
+                                .font(.system(size: 10))
+                                .foregroundColor(.black)
+                                .frame(width: fontSizeForText(data))
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 6)
+                                .background(Color.white)
+                                .cornerRadius(15)
+                                .overlay(RoundedRectangle(cornerRadius: 15).stroke(lineWidth: 1).foregroundColor(.gray))
+                        }
+                    }
+                    .padding(.vertical, 10).padding(.trailing, 10)
+                }
+                
+            } else {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle())
             }
+            
         }
         .padding(.leading, 40)
         .frame(minHeight: 50, maxHeight: .infinity)
         .frame(width: .infinity)
         .background(Color.white)
         .padding(.top, 7)
+        .onAppear {
+            viewModel.fetchUserData()
+        }
     }
+    private func getCombinedData(profileData: UserProfileResponse) -> [String] {
+        var combinedData: [String] = []
+        
+        let shift = profileData.shift
+        combinedData.append("\(shift)")
+        
+        
+        let startTime = profileData.officehoursstart
+        let endTime = profileData.officehoursend
+        combinedData.append("\(startTime)")
+        combinedData.append("\(endTime)")
+        
+        let workingDays = profileData.workingdays
+        
+        let daysOfWeek: [(String, Bool)] = [
+            ("Mon", workingDays.monday),
+            ("Tue", workingDays.tuesday),
+            ("Wed", workingDays.wednesday),
+            ("Thu", workingDays.thursday),
+            ("Fri", workingDays.friday),
+            ("Sat", workingDays.saturday),
+            ("Sun", workingDays.sunday)
+        ]
+        
+        for (day, isWorking) in daysOfWeek {
+            if isWorking {
+                combinedData.append("\(day)")
+            }
+        }
+        return combinedData
+    }
+    private func fontSizeForText(_ text: String) -> CGFloat {
+        let thresholdLength = 8 // Define a threshold length for longer text
+        if text.count > thresholdLength {
+            return 50 // Set a smaller font size for longer text
+        } else {
+            return 30 // Default font size for shorter text
+        }
+    }
+
 }
+
 
 struct ProfileEditDocuments: View {
     let title: String
@@ -189,8 +283,9 @@ struct ProfileEditDocuments: View {
     }
 }
 
-
 struct ProfileInfoView: View {
+    @ObservedObject var viewModel = AuthService.shared
+    @State private var userProfile: UserProfileResponse?
     var body: some View {
         ZStack {
             Rectangle()
@@ -199,90 +294,118 @@ struct ProfileInfoView: View {
                 .padding(.top, 10)
             
             HStack {
-                //1st column
-                VStack(alignment: .listRowSeparatorLeading) {
-                    Text("Full name")
-                        .font(.system(size: 12))
-                        .foregroundColor(Color(UIColor(hex: "#5E6278")))
-                    Text("Pritam Sarkar")
-                        .font(.system(size: 12))
-                        .foregroundColor(.black)
-                        .padding(.top, 1)
+                if let userProfile = viewModel.ProfileData {
+                    //1st column
+                    VStack(alignment: .listRowSeparatorLeading) {
+                        Text("Full name")
+                            .font(.system(size: 12))
+                            .foregroundColor(Color(UIColor(hex: "#5E6278")))
+                        Text("\(userProfile.name)")
+                        
+                            .font(.system(size: 12))
+                            .foregroundColor(.black)
+                            .padding(.top, 1)
+                        
+                        Text("Email")
+                            .font(.system(size: 12))
+                            .foregroundColor(Color(UIColor(hex: "#5E6278")))
+                            .padding(.top, 10)
+                        Text("\(userProfile.email)")
+                            .frame(width: 95)
+                            .tint(.black)
+                            .font(.system(size: 12))
+                            .padding(.top, 1)
+                        
+                        Text("DOB")
+                            .font(.system(size: 12))
+                            .foregroundColor(Color(UIColor(hex: "#5E6278")))
+                            .padding(.top, 10)
+                        
+                        if let dobString = userProfile.dob {
+                            if let dobDate = parseDate(from: dobString) {
+                                let formattedDOB = formatDate(dobDate)
+                                
+                                Text(formattedDOB)
+                                    .tint(.black)
+                                    .font(.system(size: 12))
+                                    .padding(.top, 1)
+                            }
+                        }
+                        
+                        Text("Location")
+                            .font(.system(size: 12))
+                            .foregroundColor(Color(UIColor(hex: "#5E6278")))
+                            .padding(.top, 10)
+                        Text("\(userProfile.location)")
+                            .tint(.black)
+                            .font(.system(size: 12))
+                            .padding(.top, 1)
+                            .padding(.bottom, 40)
+                        
+                    }.padding(.leading, 40)
+                    Spacer()
                     
-                    Text("Email")
-                        .font(.system(size: 12))
-                        .foregroundColor(Color(UIColor(hex: "#5E6278")))
-                        .padding(.top, 10)
-                    Text("saarkarpritam16@gmail.com")
-                        .frame(width: 70)
-                        .tint(.black)
-                        .font(.system(size: 12))
-                        .padding(.top, 1)
-                    
-                    Text("DOB")
-                        .font(.system(size: 12))
-                        .foregroundColor(Color(UIColor(hex: "#5E6278")))
-                        .padding(.top, 10)
-                    Text("09/01/2003")
-                        .tint(.black)
-                        .font(.system(size: 12))
-                        .padding(.top, 1)
-                    
-                    Text("Location")
-                        .font(.system(size: 12))
-                        .foregroundColor(Color(UIColor(hex: "#5E6278")))
-                        .padding(.top, 10)
-                    Text("")
-                        .tint(.black)
-                        .font(.system(size: 12))
-                        .padding(.top, 1)
-                    
-                }.padding(.leading, 40)
-                //2nd column
-                VStack(alignment: .listRowSeparatorLeading) {
-                    Text("Gender")
-                        .font(.system(size: 12))
-                        .foregroundColor(Color(UIColor(hex: "#5E6278")))
-                    Text("Male")
-                        .font(.system(size: 12))
-                        .foregroundColor(.black)
-                        .padding(.top, 1)
-                    
-                    Text("Mobile")
-                        .font(.system(size: 12))
-                        .foregroundColor(Color(UIColor(hex: "#5E6278")))
-                        .padding(.top, 10)
-                    Text("8900673232")
-                        .tint(.black)
-                        .font(.system(size: 12))
-                        .padding(.top, 1)
-                    
-                    Text("Ocupation")
-                        .font(.system(size: 12))
-                        .foregroundColor(Color(UIColor(hex: "#5E6278")))
-                        .padding(.top, 45)
-                    Text("")
-                        .tint(.black)
-                        .font(.system(size: 12))
-                        .padding(.top, 1)
-                    
-                    Text("Office address")
-                        .font(.system(size: 12))
-                        .foregroundColor(Color(UIColor(hex: "#5E6278")))
-                        .padding(.top, 10)
-                    Text("")
-                        .tint(.black)
-                        .font(.system(size: 12))
-                        .padding(.top, 1)
-                    
-                }.padding(.leading, 40)
-                Spacer()
+                    //2nd column
+                    VStack(alignment: .listRowSeparatorLeading) {
+                        Text("Gender")
+                            .font(.system(size: 12))
+                            .foregroundColor(Color(UIColor(hex: "#5E6278")))
+                        Text("\(userProfile.gender)")
+                            .font(.system(size: 12))
+                            .foregroundColor(.black)
+                            .padding(.top, 1)
+                        
+                        Text("Mobile")
+                            .font(.system(size: 12))
+                            .foregroundColor(Color(UIColor(hex: "#5E6278")))
+                            .padding(.top, 10)
+                        Text("\(userProfile.phone)")
+                            .tint(.black)
+                            .font(.system(size: 12))
+                            .padding(.top, 1)
+                        
+                        Text("Ocupation")
+                            .font(.system(size: 12))
+                            .foregroundColor(Color(UIColor(hex: "#5E6278")))
+                            .padding(.top, 45)
+                        Text("\(userProfile.occupation)")
+                            .tint(.black)
+                            .font(.system(size: 12))
+                            .padding(.top, 1)
+                        
+                        Text("Office address")
+                            .font(.system(size: 12))
+                            .foregroundColor(Color(UIColor(hex: "#5E6278")))
+                            .padding(.top, 10)
+                        Text("\(userProfile.officeaddress)")
+                            .tint(.black)
+                            .font(.system(size: 12))
+                            .padding(.top, 1)
+                        
+                    }.padding(.leading, 40)
+                    Spacer()
+                }
             }
             
-            
+        }
+        .onAppear{
+            viewModel.fetchUserData()
         }
     }
+    func parseDate(from dateString: String) -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        return dateFormatter.date(from: dateString)
+    }
+    
+    // Function to format the date
+    func formatDate(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        return dateFormatter.string(from: date)
+    }
 }
+
 
 
 

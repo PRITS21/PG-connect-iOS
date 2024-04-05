@@ -8,16 +8,16 @@
 import Foundation
 
 struct PGDetailsResponse: Codable {
-    let pgdata: [PGDetailsData]
+    let pgdata: PGDetailsData
     let bookingsallowed: BookingsAllowed
     let scheduledvisitsallowed: Bool
     let roomsdata: RoomsData
+    
 }
 
-struct PGDetailsData: Codable, Identifiable {
-    let id = UUID() // Add a unique identifier
-    let roomsharingoptions: RoomSharingOptions
-    let roomavailability: RoomAvailability
+struct PGDetailsData: Codable{
+    let roomsharingoptions: [String: Bool]
+    let roomavailability: RoomAvailability2
     let rent: Rent
     let _id: String
     let pgname: String
@@ -35,35 +35,92 @@ struct PGDetailsData: Codable, Identifiable {
 }
 
 
-struct Image3: Codable, Identifiable {
-    let id = UUID()
-    var img: String
+struct RoomAvailability2: Codable {
+    let hourly: Bool
+    let daily: Bool
+    let monthly: Bool
+    
+    var availableOptions: [String] {
+        var options: [String] = []
+        if hourly {
+            options.append("Hourly")
+        }
+        if daily {
+            options.append("Daily")
+        }
+        if monthly {
+            options.append("Monthly")
+        }
+        return options
+    }
 }
 
 struct Rent: Codable {
-    let monthly, daily, hourly: RentDetails
+    let monthly, daily, hourly: RentType
+}
+
+struct RentType: Codable {
+    let nonac, ac: RentDetails
 }
 
 struct RentDetails: Codable {
-    let nonac: RentDetailsType
-    let ac: RentDetailsType
+    let maintenance, advance, onesharing, twosharing, threesharing, foursharing, fivesharing, sixsharing, sevensharing, eightsharing, ninesharing, tensharing: Int?
+
+    var availableOptions: [(String, Int)] {
+        var options: [(String, Int)] = []
+        if let oneSharing = onesharing, oneSharing > 0 {
+            options.append(("1 sharing", oneSharing))
+        }
+        if let twoSharing = twosharing, twoSharing > 0 {
+            options.append(("2 sharing", twoSharing))
+        }
+        if let threeSharing = threesharing, threeSharing > 0 {
+            options.append(("3 sharing", threeSharing))
+        }
+        if let fourSharing = foursharing, fourSharing > 0 {
+            options.append(("4 sharing", fourSharing))
+        }
+        if let fiveSharing = fivesharing, fiveSharing > 0 {
+            options.append(("5 sharing", fiveSharing))
+        }
+        if let sixSharing = sixsharing, sixSharing > 0 {
+            options.append(("6 sharing", sixSharing))
+        }
+        if let sevenSharing = sevensharing, sevenSharing > 0 {
+            options.append(("7 sharing", sevenSharing))
+        }
+        if let eightSharing = eightsharing, eightSharing > 0 {
+            options.append(("8 sharing", eightSharing))
+        }
+        if let nineSharing = ninesharing, nineSharing > 0 {
+            options.append(("9 sharing", nineSharing))
+        }
+        if let tenSharing = tensharing, tenSharing > 0 {
+            options.append(("10 sharing", tenSharing))
+        }
+        return options
+    }
 }
 
-struct RentDetailsType: Codable {
-    let maintenance, advance: Int
-    let onesharing, twosharing, threesharing, foursharing, fivesharing, sixsharing, sevensharing, eightsharing, ninesharing, tensharing: Int
+struct Image3: Codable, Hashable {
+    let img: String
 }
 
-struct Nearby: Codable {
-    let name, distance, _id: String
+struct Nearby: Codable, Hashable {
+    let name: String
+    let distance, _id: String
 }
 
 struct BookingsAllowed: Codable {
-    let monthly, daily, hourly: BookingsAllowedDetails
+    let monthly, daily, hourly: BookingsType
 }
 
-struct BookingsAllowedDetails: Codable {
-    let nonac, ac: RoomSharingOptions
+struct BookingsType: Codable {
+    let nonac, ac: BookingsDetails
+}
+
+struct BookingsDetails: Codable {
+    let onesharing, twosharing, threesharing, foursharing, fivesharing, sixsharing, sevensharing, eightsharing, ninesharing, tensharing: Bool
 }
 
 struct RoomsData: Codable {

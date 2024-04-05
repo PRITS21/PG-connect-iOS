@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ProfileView: View {
+    @ObservedObject var viewModel = AuthService.shared
+    @State private var userProfile: UserProfileResponse?
     
     var body: some View {
         NavigationView {
@@ -21,14 +23,18 @@ struct ProfileView: View {
                     .shadow(color: Color.gray.opacity(0.2), radius: 2, x: 0, y: 2)
                     .overlay (
                         VStack {
-                            Text("Pritam Sarkar")
-                                .fontWeight(.medium)
-                                .font(.system(size: 18))
+                            if let userProfile = viewModel.ProfileData {
+                                Text("\(userProfile.name)")
+                                    .fontWeight(.medium)
+                                    .font(.system(size: 18))
+                            }
                             Image(uiImage: UIImage(named: "QR-code")!)
                                 .resizable()
                                 .frame(width: 140, height: 140)
-                            Text("ID: 65f3adde14c3")
-                                .font(.system(size: 12))
+                            if let userProfile = viewModel.ProfileData {
+                                Text("ID: \(userProfile.profileid)")
+                                    .font(.system(size: 12))
+                            }
                         }
                     )
                     .padding(.top, 25)
@@ -73,6 +79,9 @@ struct ProfileView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color(uiColor: .systemGray6).opacity(0.1))
+        }
+        .onAppear{
+            viewModel.fetchUserData()
         }
     }
 }

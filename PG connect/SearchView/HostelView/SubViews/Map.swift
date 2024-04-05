@@ -8,7 +8,7 @@ import SwiftUI
 import MapKit
 
 struct MapView: View {
-    @State private var locationText: String = "J.B.S. Haldane Avenue, Kolkata-700 046, West Bengal, India"
+    let locationText: String
     let latitude: Double
     let longitude: Double
 
@@ -61,8 +61,3 @@ struct MapBox: View {
     }
 }
 
-struct MapView_Previews: PreviewProvider {
-    static var previews: some View {
-        MapView(latitude: 22.50108, longitude: 88.36176)
-    }
-}

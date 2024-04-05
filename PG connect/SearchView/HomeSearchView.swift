@@ -42,7 +42,7 @@ struct HomeSearchView: View {
                                     Spacer()
                                 }.padding(.leading, 10).padding(.top, 10).background(Color(.systemGray6))
                                 
-                                PG_GridView()
+                                PG_GridView(selectedCity: $selectedCity)
                                 
                             }
                             .zIndex(0)
@@ -228,12 +228,16 @@ struct CitySheet: View {
     
     var body: some View {
         VStack(spacing: 10) {
-            Button("Hyderabad") {
-                selectedCity = "Hyderabad"
+            Button("All Cities") {
+                selectedCity = nil
                 dismiss()
             }
-            Button("Telangana") {
-                selectedCity = "Telangana"
+            Button("Hyderabad") {
+                selectedCity = "hyderabad"
+                dismiss()
+            }
+            Button("Chennai") {
+                selectedCity = "Chennai"
                 dismiss()
             }
             Button("Karnataka") {
