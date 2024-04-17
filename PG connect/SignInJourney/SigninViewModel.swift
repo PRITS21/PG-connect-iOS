@@ -12,6 +12,7 @@ class SigninViewModel: ObservableObject {
     @Published var password = ""
     @Published var errorMessage = ""
     @Published var showAlert = false
+    @Published var isLoggedIn = false // Added property to track login status
 
     
     func signIn() async throws {
@@ -26,13 +27,13 @@ class SigninViewModel: ObservableObject {
                 case .failure(let error):
                     DispatchQueue.main.async {
                         self.errorMessage = error.localizedDescription
-                        self.showAlert = true // Show alert when there's an error
+                        self.showAlert = true
                     }
                 }
             }
         } catch {
             self.errorMessage = error.localizedDescription
-            self.showAlert = true // Show alert when there's an error
+            self.showAlert = true
         }
     }
 
@@ -41,7 +42,7 @@ class SigninViewModel: ObservableObject {
         // Handle successful sign-in here, such as navigating to the next screen
         print("Hola yeah")
         AuthService.shared.saveToken(token)
-
+        self.isLoggedIn = true
 
     }
 }

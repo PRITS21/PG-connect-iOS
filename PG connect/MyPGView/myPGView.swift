@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct myPGView: View {
+    @State private var roomDetails: RoomDetailsResponse?
+    @ObservedObject var viewModel = AuthService.shared
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -16,13 +18,14 @@ struct myPGView: View {
                 
                 // 1st part - Header
                 ZStack(alignment: .center) {
-                    
-                    Text("ALR Boys PG")
-                        .multilineTextAlignment(.center)
-                        .font(.system(size: 20))
-                        .bold()
-                        .foregroundStyle(Color(UIColor(hex: "#7F32CD")))
-                    
+                    if let roomDetails = viewModel.room {
+                        
+                        Text("\(roomDetails.room.pgid.pgname)")
+                            .multilineTextAlignment(.center)
+                            .font(.system(size: 20))
+                            .bold()
+                            .foregroundStyle(Color(UIColor(hex: "#7F32CD")))
+                    }
                 }.padding(.top, 5).padding(.bottom, 30)
                 
                 //Menu button
@@ -60,7 +63,12 @@ struct myPGView: View {
                 Spacer()
                 
             }
-        }.navigationBarBackButtonHidden()
+        }
+        .navigationBarBackButtonHidden()
+        .onAppear {
+            viewModel.getUserRoomDetails()
+            
+        }
     }
 }
 

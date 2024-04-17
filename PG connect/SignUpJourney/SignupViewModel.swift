@@ -16,6 +16,7 @@ class SignUpViewModel: ObservableObject {
     @Published var signUpPressed = false
     @Published var selectedGenderIndex = 0
     @Published var genderOptions = ["","Male", "Female", "Other"]
+    @Published var isLoggedIn = false
     
     var gender: String {
         return genderOptions[selectedGenderIndex]
@@ -27,11 +28,9 @@ class SignUpViewModel: ObservableObject {
             try await AuthService.shared.signUp(withName: name, email: email, phone: phone, state: state, city: city, password: password, gender: gender) { result in
                 switch result {
                 case .success(let token):
-                    // Handle successful sign-up
                     print("Sign-up successful")
                     self.handleSuccessfulSignUp(withToken: token)
                 case .failure(let error):
-                    // Handle sign-up failure
                     print("Error signing up: \(error.localizedDescription)")
                     self.errorMessage = error.localizedDescription
                 }
@@ -46,6 +45,7 @@ class SignUpViewModel: ObservableObject {
         // Handle successful sign-in here, such as navigating to the next screen
         print("Yeah Boi")
         AuthService.shared.saveToken(token)
+        self.isLoggedIn = true
     }
 }
 

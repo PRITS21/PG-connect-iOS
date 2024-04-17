@@ -42,4 +42,66 @@ extension View{
             }
     }
 }
+extension Date {
+    func formattedDate2() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yyyy"
+        return dateFormatter.string(from: self)
+    }
+}
+extension String {
+    func formattedDate3() -> String {
+        let dateFormatter = ISO8601DateFormatter()
+        dateFormatter.formatOptions = [.withFullDate, .withDashSeparatorInDate]
+        if let date = dateFormatter.date(from: self) {
+            let formattedDateFormatter = DateFormatter()
+            formattedDateFormatter.dateFormat = "dd MMM"
+            return formattedDateFormatter.string(from: date)
+        } else {
+            return "Invalid Date"
+        }
+    }
+}
+extension String {
+    // Function to format date from ISO 8601 string
+    func formattedDate() -> String {
+        let dateFormatter = ISO8601DateFormatter()
+        dateFormatter.formatOptions = [.withFullDate, .withDashSeparatorInDate]
+        if let date = dateFormatter.date(from: self) {
+            let formattedDateFormatter = DateFormatter()
+            formattedDateFormatter.dateFormat = "dd-MM-yyyy"
+            return formattedDateFormatter.string(from: date)
+        } else {
+            return "Invalid Date"
+        }
+    }
+    
+    func formattedTime() -> String {
+            let dateFormatter = ISO8601DateFormatter()
+            dateFormatter.formatOptions = [.withFullDate, .withTime, .withDashSeparatorInDate, .withColonSeparatorInTime]
+            
+            if let date = dateFormatter.date(from: self) {
+                let timeFormatter = DateFormatter()
+                timeFormatter.timeStyle = .short
+                timeFormatter.dateStyle = .none
+                
+                return timeFormatter.string(from: date)
+            } else {
+                return "Invalid Date"
+            }
+        }
+}
+
+
+struct InnerHeightPreferenceKey: PreferenceKey {
+    static let defaultValue: CGFloat = .zero
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
+    }
+}
+
+struct AlertItem: Identifiable {
+    var id = UUID()
+    var message: String
+}
 

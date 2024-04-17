@@ -7,6 +7,18 @@
 
 import SwiftUI
 
+
+struct MenuResponse: Codable {
+    let breakfast: MenuOption
+    let lunch: MenuOption
+    let dinner: MenuOption
+}
+
+struct MenuOption: Codable {
+    let option1: String
+    let option2: String
+}
+
 struct TodayMenuView: View {
     @Environment(\.dismiss) var dismiss
     @State private var selectedTab: Tab = .Tiffin
@@ -103,13 +115,14 @@ struct TodayMenuView: View {
                 
                 if selectedTab == .Tiffin
                 {
-                    TiffinView(Food_tiffin: $FoodName_tiffin)
+                    MealView(food: $FoodName_tiffin, mealType: .breakfast)
                     
                 } else if selectedTab == .Lunch {
                     
-                    LunchView(Food_lunch: $FoodName_lunch)
+                    MealView(food: $FoodName_lunch, mealType: .lunch)
+                    
                 } else {
-                    DinnerView(Food_dinner: $FoodName_dinner)
+                    MealView(food: $FoodName_dinner, mealType: .dinner)
                 }
                 
                 Button{
@@ -123,72 +136,25 @@ struct TodayMenuView: View {
                 Spacer()
             }
             .sheet(isPresented: $SkipSheetPresented){
-                SkipSheet()
-                    .presentationDetents([.medium, .large])
+                MenuView()
+                    .presentationDetents([.height(450)])
                     .presentationCornerRadius(21)
             }
         }.navigationBarBackButtonHidden()
     }
 }
 
-
-struct TiffinView: View {
-    @Binding var Food_tiffin: String
-    
-    var body: some View {
-        
-        
-        VStack {
-            ForEach(0..<3) { _ in
-                Rectangle()
-                    .frame(width: .infinity, height: 80)
-                    .foregroundColor(.white)
-                    .padding(.horizontal)
-                    .padding(.top, 7)
-                    .overlay (
-                        HStack {
-                            
-                            ZStack {
-                                Rectangle()
-                                    .frame(width: 50, height: 50)
-                                    .cornerRadius(10)
-                                    .foregroundColor(Color(uiColor: .systemGray6))
-                                
-                                Image(uiImage: UIImage(named: "Food")!)
-                                    .resizable()
-                                    .frame(width: 35, height: 35)
-                                
-                            }.padding(.leading, 30)
-                            VStack(alignment: .listRowSeparatorLeading, spacing: 5){
-                                
-                                Text(Food_tiffin)
-                                    .bold()
-                                    .foregroundStyle(Color.black)
-                                    .font(.system(size: 16))
-                                Text("08:30PM to 10:30PM")
-                                    .foregroundStyle(Color.black)
-                                    .font(.system(size: 12)).fontWeight(.medium)
-                                
-                                Spacer()
-                            }.padding(.leading, 30).padding(.top, 22)
-                            Spacer()
-                        }
-                    )
-                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(lineWidth: 0.7).foregroundColor(.gray))
-                    .background(Color.white)
-                    .padding(.horizontal)
-                    .padding(.top, 10)
-            }
-        }.padding(.top, 30)
+struct MealView: View {
+    enum MealType {
+        case breakfast
+        case lunch
+        case dinner
     }
-}
-
-struct LunchView: View {
-    @Binding var Food_lunch: String
+    
+    @Binding var food: String
+    var mealType: MealType
     
     var body: some View {
-        
-        
         VStack {
             ForEach(0..<3) { _ in
                 Rectangle()
@@ -198,7 +164,6 @@ struct LunchView: View {
                     .padding(.top, 7)
                     .overlay (
                         HStack {
-                            
                             ZStack {
                                 Rectangle()
                                     .frame(width: 50, height: 50)
@@ -208,70 +173,15 @@ struct LunchView: View {
                                 Image(uiImage: UIImage(named: "Food")!)
                                     .resizable()
                                     .frame(width: 35, height: 35)
-                                
                             }.padding(.leading, 30)
-                            VStack(alignment: .listRowSeparatorLeading, spacing: 5){
-                                
-                                Text(Food_lunch)
+                            VStack(alignment: .leading, spacing: 5){
+                                Text(food)
                                     .bold()
                                     .foregroundStyle(Color.black)
                                     .font(.system(size: 16))
                                 Text("08:30PM to 10:30PM")
                                     .foregroundStyle(Color.black)
                                     .font(.system(size: 12)).fontWeight(.medium)
-                                
-                                Spacer()
-                            }.padding(.leading, 30).padding(.top, 22)
-                            Spacer()
-                        }
-                    )
-                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(lineWidth: 0.7).foregroundColor(.gray))
-                    .background(Color.white)
-                    .padding(.horizontal)
-                    .padding(.top, 10)
-            }
-        }.padding(.top, 30)
-    }
-}
-
-
-struct DinnerView: View {
-    @Binding var Food_dinner: String
-    
-    var body: some View {
-        
-        
-        VStack {
-            ForEach(0..<3) { _ in
-                Rectangle()
-                    .frame(width: .infinity, height: 80)
-                    .foregroundColor(.white)
-                    .padding(.horizontal)
-                    .padding(.top, 7)
-                    .overlay (
-                        HStack {
-                            
-                            ZStack {
-                                Rectangle()
-                                    .frame(width: 50, height: 50)
-                                    .cornerRadius(10)
-                                    .foregroundColor(Color(uiColor: .systemGray6))
-                                
-                                Image(uiImage: UIImage(named: "Food")!)
-                                    .resizable()
-                                    .frame(width: 35, height: 35)
-                                
-                            }.padding(.leading, 30)
-                            VStack(alignment: .listRowSeparatorLeading, spacing: 5){
-                                
-                                Text(Food_dinner)
-                                    .bold()
-                                    .foregroundStyle(Color.black)
-                                    .font(.system(size: 16))
-                                Text("08:30PM to 10:30PM")
-                                    .foregroundStyle(Color.black)
-                                    .font(.system(size: 12)).fontWeight(.medium)
-                                
                                 Spacer()
                             }.padding(.leading, 30).padding(.top, 22)
                             Spacer()

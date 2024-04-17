@@ -1,120 +1,92 @@
+
+
+
 import SwiftUI
 
+struct SkipMenuResponse: Codable {
+    let skipmenu: [String: [String: Bool]]
+}
+
+
 struct SkipSheet: View {
-    let daysOfWeek = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"]
+    @ObservedObject var authService = AuthService.shared
+    let daysOfWeek = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
+    let labels = ["Dinner", "Lunch", "Breakfast"]
     @Environment(\.dismiss) var dismiss
-    @State private var breakfastStates: [Bool] = Array(repeating: true, count: 6)
-    @State private var LunchStates: [Bool] = Array(repeating: true, count: 6)
-    @State private var DinnerStates: [Bool] = Array(repeating: true, count: 6)
+    
+    let dayAbbreviations: [String: String] = [
+        "sunday": "Sun", "monday": "Mon", "tuesday": "Tue",
+        "wednesday": "Wed", "thursday": "Thu", "friday": "Fri",
+        "saturday": "Sat"
+    ]
     
     var body: some View {
-        VStack {
+        VStack(alignment: .center, spacing: 0) {
             
-            Spacer()
             HStack {
                 Text("Set Up Skip Setup")
                     .foregroundColor(.black)
-                    .font(.system(size: 15))
+                    .font(.system(size: 14))
                     .fontWeight(.medium)
                 
                 Spacer()
-            }.padding(.leading, 60).padding(.bottom, 7)
+            }.padding(.leading, 35).padding(.bottom, 10)
             
             HStack(spacing: 0) {
-                // 1st column
-                VStack(spacing: 0){
-                    
-                    
-                    ForEach(daysOfWeek, id: \.self) { day in
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.white)
+                    .frame(width: 80, height: 40)
+                    .overlay(
+                        Text("Days")
+                            .foregroundColor(.black)
+                            .font(.system(size: 15))
+                            .fontWeight(.semibold)
+                    )
+                    .overlay(RoundedRectangle(cornerRadius: 1).stroke(lineWidth: 0.7).foregroundColor(.gray))
+                
+                
+                ForEach(labels, id: \.self) { label in
+                    VStack(spacing: 0) {
                         RoundedRectangle(cornerRadius: 10)
                             .fill(Color.white)
-                            .frame(width: 50, height: 40)
+                            .frame(width: 70, height: 40)
                             .overlay(
-                                Text(day)
+                                Text(label)
                                     .foregroundColor(.black)
+                                    .font(.system(size: label == "Breakfast" ? 14 : 15)) // Conditional font size
                                     .fontWeight(.semibold)
-                                    .font(.system(size: 15))
                             )
                             .overlay(RoundedRectangle(cornerRadius: 1).stroke(lineWidth: 0.7).foregroundColor(.gray))
+                        
                     }
                 }
+            }.padding(.horizontal)
+            
+            //table
+            ForEach(authService.skipMenu.sorted(by: { (daysOfWeek.firstIndex(of: $0.key) ?? 7) < (daysOfWeek.firstIndex(of: $1.key) ?? 7) }), id: \.key) { day, items in
                 
-                // 2nd column
-                VStack(spacing: 0){
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.white)
+                HStack(spacing: 0) {
+                    Text(dayAbbreviations[day] ?? "")
                         .frame(width: 80, height: 40)
-                        .overlay(
-                            Text("Breakfast")
-                                .foregroundColor(.black)
-                                .font(.system(size: 14)).fontWeight(.semibold)
-                        )
+                        .foregroundColor(.black)
+                        .font(.system(size: day == "Wednesday" ? 12 : 14)) // Conditional font size
+                        .fontWeight(.semibold)
                         .overlay(RoundedRectangle(cornerRadius: 1).stroke(lineWidth: 0.7).foregroundColor(.gray))
                     
-                    ForEach(0..<6) { index in
-                        Button {
-                            self.breakfastStates[index].toggle()
-                        } label: {
-                            Text(self.breakfastStates[index] ? "Yes" : "")
-                                .foregroundColor(.black)
-                                .frame(width: 80, height: 40)
-                                .font(.system(size: 15))
-                        }
-                        .overlay(RoundedRectangle(cornerRadius: 1).stroke(lineWidth: 0.7).foregroundColor(.gray))
-                    }
-                }
-                
-                // 3rd column
-                VStack(spacing: 0){
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.white)
-                        .frame(width: 70, height: 40)
-                        .overlay(
-                            Text("Lunch")
-                                .foregroundColor(.black)
-                                .font(.system(size: 15))
-                                .fontWeight(.semibold)
-                        )
-                        .overlay(RoundedRectangle(cornerRadius: 1).stroke(lineWidth: 0.7).foregroundColor(.gray))
-                    
-                    ForEach(0..<6) { index in
-                        Button {
-                            self.LunchStates[index].toggle()
-                        } label: {
-                            Text(self.LunchStates[index] ? "Yes" : "")
-                                .foregroundColor(.black)
+                    ForEach(items.sorted(by: { $0.key < $1.key }), id: \.key) { meal, canSkip in
+                        Button(action: {
+                            self.authService.toggleSkipMenu(day: day, meal: meal, newValue: !canSkip)
+                        }) {
+                            Text(canSkip ? "Yes" : "")
                                 .frame(width: 70, height: 40)
-                                .font(.system(size: 15))
-                        }
-                        .overlay(RoundedRectangle(cornerRadius: 1).stroke(lineWidth: 0.7).foregroundColor(.gray))
-                    }
-                }
-                
-                // 4th column
-                VStack(spacing: 0){
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.white)
-                        .frame(width: 70, height: 40)
-                        .overlay(
-                            Text("Dinner")
                                 .foregroundColor(.black)
                                 .font(.system(size: 15))
-                                .fontWeight(.semibold)
-                        )
-                        .overlay(RoundedRectangle(cornerRadius: 1).stroke(lineWidth: 0.7).foregroundColor(.gray))
-                    
-                    ForEach(0..<6) { index in
-                        Button {
-                            self.DinnerStates[index].toggle()
-                        } label: {
-                            Text(self.DinnerStates[index] ? "Yes" : "")
-                                .foregroundColor(.black)
-                                .frame(width: 70, height: 40)
-                                .font(.system(size: 15))
+                                .overlay(RoundedRectangle(cornerRadius: 1).stroke(lineWidth: 0.7).foregroundColor(.gray))
                         }
-                        .overlay(RoundedRectangle(cornerRadius: 1).stroke(lineWidth: 0.7).foregroundColor(.gray))
                     }
                 }
+                .padding(.horizontal)
+                .cornerRadius(10)
             }
             
             HStack(spacing: 10) {
@@ -142,11 +114,27 @@ struct SkipSheet: View {
                 }
             }.padding(.trailing, 40).padding(.top, 15).padding(.bottom, 10)
         }
+        .padding()
+        .onAppear {
+            authService.fetchSkipMenu()
+        }
     }
+
 }
 
 struct SkipSheet_Previews: PreviewProvider {
     static var previews: some View {
-        SkipSheet()
+        let authService = AuthService() // Assuming AuthService conforms to ObservableObject
+        authService.skipMenu = [
+            "sunday": ["Breakfast": true, "Lunch": false, "Dinner": true],
+            "monday": ["Breakfast": true, "Lunch": true, "Dinner": true],
+            "tuesday": ["Breakfast": false, "Lunch": true, "Dinner": true],
+            "wednesday": ["Breakfast": true, "Lunch": true, "Dinner": true],
+            "thursday": ["Breakfast": true, "Lunch": true, "Dinner": true],
+            "friday": ["Breakfast": true, "Lunch": true, "Dinner": true],
+            "saturday": ["Breakfast": true, "Lunch": true, "Dinner": true]
+        ]
+        return SkipSheet(authService: authService)
     }
 }
+

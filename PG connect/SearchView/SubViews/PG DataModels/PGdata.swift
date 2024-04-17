@@ -9,8 +9,8 @@ import Foundation
 
 struct PgResponse: Codable {
     let pgdata: [PGData]
-}
 
+}
 
 struct PGData: Codable, Identifiable {
     let id = UUID() // Add a unique identifier
@@ -25,6 +25,7 @@ struct PGData: Codable, Identifiable {
     let badges: [String]
     let roomsharingoptions: RoomSharingOptions
     var startingfrom: Int
+
 }
 
 struct RoomAvailability: Codable {

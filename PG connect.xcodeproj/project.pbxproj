@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		371910732BCBABF6007BF425 /* AadharCardSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371910722BCBABF6007BF425 /* AadharCardSheet.swift */; };
+		371910752BCBBECA007BF425 /* DLCardSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371910742BCBBECA007BF425 /* DLCardSheet.swift */; };
+		3719107B2BCBE52E007BF425 /* Razorpay.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 371910792BCBE526007BF425 /* Razorpay.xcframework */; };
+		3719107C2BCBE52E007BF425 /* Razorpay.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 371910792BCBE526007BF425 /* Razorpay.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3719107F2BCBF13A007BF425 /* RazorpayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3719107E2BCBF13A007BF425 /* RazorpayModel.swift */; };
 		371F8BB92BB05D3A007EE6DD /* AddGroupSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371F8BB82BB05D3A007EE6DD /* AddGroupSheet.swift */; };
 		371F8BC22BB08176007EE6DD /* AddExpensesSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371F8BC12BB08176007EE6DD /* AddExpensesSheet.swift */; };
 		371F8BC42BB081B9007EE6DD /* CardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371F8BC32BB081B9007EE6DD /* CardsView.swift */; };
@@ -25,10 +30,12 @@
 		373EB7EC2B9CC7A7007D54DF /* Rules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373EB7EB2B9CC7A7007D54DF /* Rules.swift */; };
 		373EFEB42BA3F690004D12B2 /* ProfileEditPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373EFEB32BA3F690004D12B2 /* ProfileEditPage.swift */; };
 		374242062BAAA447005304C8 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 374242052BAAA447005304C8 /* MessageUI.framework */; };
-		3757941D2BBC75F600813828 /* UserProfileData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3757941C2BBC75F600813828 /* UserProfileData.swift */; };
+		3765C5042BC104BA0066415A /* DNDResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3765C5032BC104BA0066415A /* DNDResponseModel.swift */; };
+		3765C53C2BC2FABE0066415A /* RoomDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3765C53B2BC2FABE0066415A /* RoomDataModel.swift */; };
 		377756E32BA7E24F009AC031 /* ProfileChangeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377756E22BA7E24F009AC031 /* ProfileChangeView.swift */; };
 		377BC2612B9CA55000BC1E9C /* Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377BC2602B9CA55000BC1E9C /* Map.swift */; };
 		379764F82BA0A936004E1FE9 /* BookingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 379764F72BA0A935004E1FE9 /* BookingView.swift */; };
+		37A468132BC6E43E00FE6304 /* ExpensesDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A468122BC6E43E00FE6304 /* ExpensesDataModel.swift */; };
 		37AC33352BA02AF90085771C /* ScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37AC33342BA02AF90085771C /* ScheduleView.swift */; };
 		37AE933E2B9427FE00E0159C /* SignIn_1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37AE933D2B9427FE00E0159C /* SignIn_1.swift */; };
 		37AE93402B942F9500E0159C /* TextFieldsSignIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37AE933F2B942F9500E0159C /* TextFieldsSignIN.swift */; };
@@ -59,6 +66,7 @@
 		37BC0F512B9AF02900B37EAC /* Daily_btnsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37BC0F502B9AF02900B37EAC /* Daily_btnsView.swift */; };
 		37BC0F542B9AF40700B37EAC /* AC_buttonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37BC0F532B9AF40700B37EAC /* AC_buttonsView.swift */; };
 		37BC0F562B9B358B00B37EAC /* Amenities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37BC0F552B9B358B00B37EAC /* Amenities.swift */; };
+		37C19BFF2BCA48AB008B4900 /* ScheduleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C19BFE2BCA48AB008B4900 /* ScheduleModel.swift */; };
 		37C8BAD92BAEA71E0041D55C /* TodayMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C8BAD82BAEA71E0041D55C /* TodayMenuView.swift */; };
 		37C8BADB2BAEBB180041D55C /* SkipSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C8BADA2BAEBB180041D55C /* SkipSheet.swift */; };
 		37C8BADD2BAEF9390041D55C /* MyRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C8BADC2BAEF9390041D55C /* MyRoomView.swift */; };
@@ -72,12 +80,18 @@
 		37DA16332BA9D87A00FE5650 /* walletView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DA16322BA9D87A00FE5650 /* walletView.swift */; };
 		37DA16372BA9EF2A00FE5650 /* MyBookingsView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DA16362BA9EF2A00FE5650 /* MyBookingsView2.swift */; };
 		37DA16392BA9F3AE00FE5650 /* RentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DA16382BA9F3AE00FE5650 /* RentView.swift */; };
-		37E129842BBE469400B3DCD1 /* UserProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E129832BBE469400B3DCD1 /* UserProfileModel.swift */; };
+		37E129842BBE469400B3DCD1 /* ProfileUploadModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E129832BBE469400B3DCD1 /* ProfileUploadModel.swift */; };
 		37E129862BC05BA700B3DCD1 /* RentDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E129852BC05BA600B3DCD1 /* RentDataModel.swift */; };
 		37E129882BC05C9E00B3DCD1 /* WalletDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E129872BC05C9E00B3DCD1 /* WalletDataModel.swift */; };
 		37E61A992BB93D1600454421 /* URLImage in Frameworks */ = {isa = PBXBuildFile; productRef = 37E61A982BB93D1600454421 /* URLImage */; };
 		37E61A9B2BB9BEBA00454421 /* PGDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E61A9A2BB9BEBA00454421 /* PGDataModel.swift */; };
 		37E61A9D2BB9C12F00454421 /* PGdata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E61A9C2BB9C12F00454421 /* PGdata.swift */; };
+		37ED2F362BCA6D7000374BE6 /* UserProfiledata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37ED2F352BCA6D7000374BE6 /* UserProfiledata.swift */; };
+		37ED2F392BCA701F00374BE6 /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37ED2F382BCA701F00374BE6 /* NotificationView.swift */; };
+		37ED2F3B2BCAAD4D00374BE6 /* ModiftyDND.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37ED2F3A2BCAAD4D00374BE6 /* ModiftyDND.swift */; };
+		37ED2F3D2BCACE6000374BE6 /* NotificationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37ED2F3C2BCACE6000374BE6 /* NotificationModel.swift */; };
+		37ED2F3F2BCADC0800374BE6 /* BookModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37ED2F3E2BCADC0800374BE6 /* BookModel.swift */; };
+		37ED2F412BCAF08600374BE6 /* CityResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37ED2F402BCAF08600374BE6 /* CityResponse.swift */; };
 		37F085312B977D9700CE6500 /* PG_GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F085302B977D9700CE6500 /* PG_GridView.swift */; };
 		37F085332B9790FC00CE6500 /* Horizontal_ButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F085322B9790FC00CE6500 /* Horizontal_ButtonView.swift */; };
 		37FEE7442BA2178B009594C4 /* DropdownMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37FEE7432BA2178B009594C4 /* DropdownMenu.swift */; };
@@ -100,7 +114,25 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		3719107D2BCBE52E007BF425 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				3719107C2BCBE52E007BF425 /* Razorpay.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		371910722BCBABF6007BF425 /* AadharCardSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AadharCardSheet.swift; sourceTree = "<group>"; };
+		371910742BCBBECA007BF425 /* DLCardSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DLCardSheet.swift; sourceTree = "<group>"; };
+		371910792BCBE526007BF425 /* Razorpay.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Razorpay.xcframework; path = ../../Razorpay.xcframework; sourceTree = "<group>"; };
+		3719107E2BCBF13A007BF425 /* RazorpayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RazorpayModel.swift; sourceTree = "<group>"; };
 		371F8BB82BB05D3A007EE6DD /* AddGroupSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGroupSheet.swift; sourceTree = "<group>"; };
 		371F8BC12BB08176007EE6DD /* AddExpensesSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExpensesSheet.swift; sourceTree = "<group>"; };
 		371F8BC32BB081B9007EE6DD /* CardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsView.swift; sourceTree = "<group>"; };
@@ -119,10 +151,12 @@
 		373EB7EB2B9CC7A7007D54DF /* Rules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rules.swift; sourceTree = "<group>"; };
 		373EFEB32BA3F690004D12B2 /* ProfileEditPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditPage.swift; sourceTree = "<group>"; };
 		374242052BAAA447005304C8 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		3757941C2BBC75F600813828 /* UserProfileData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileData.swift; sourceTree = "<group>"; };
+		3765C5032BC104BA0066415A /* DNDResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DNDResponseModel.swift; sourceTree = "<group>"; };
+		3765C53B2BC2FABE0066415A /* RoomDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDataModel.swift; sourceTree = "<group>"; };
 		377756E22BA7E24F009AC031 /* ProfileChangeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileChangeView.swift; sourceTree = "<group>"; };
 		377BC2602B9CA55000BC1E9C /* Map.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Map.swift; sourceTree = "<group>"; };
 		379764F72BA0A935004E1FE9 /* BookingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingView.swift; sourceTree = "<group>"; };
+		37A468122BC6E43E00FE6304 /* ExpensesDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesDataModel.swift; sourceTree = "<group>"; };
 		37AC33342BA02AF90085771C /* ScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleView.swift; sourceTree = "<group>"; };
 		37AE933D2B9427FE00E0159C /* SignIn_1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignIn_1.swift; sourceTree = "<group>"; };
 		37AE933F2B942F9500E0159C /* TextFieldsSignIN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldsSignIN.swift; sourceTree = "<group>"; };
@@ -156,6 +190,7 @@
 		37BC0F502B9AF02900B37EAC /* Daily_btnsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Daily_btnsView.swift; sourceTree = "<group>"; };
 		37BC0F532B9AF40700B37EAC /* AC_buttonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AC_buttonsView.swift; sourceTree = "<group>"; };
 		37BC0F552B9B358B00B37EAC /* Amenities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Amenities.swift; sourceTree = "<group>"; };
+		37C19BFE2BCA48AB008B4900 /* ScheduleModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleModel.swift; sourceTree = "<group>"; };
 		37C8BAD82BAEA71E0041D55C /* TodayMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayMenuView.swift; sourceTree = "<group>"; };
 		37C8BADA2BAEBB180041D55C /* SkipSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkipSheet.swift; sourceTree = "<group>"; };
 		37C8BADC2BAEF9390041D55C /* MyRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyRoomView.swift; sourceTree = "<group>"; };
@@ -169,11 +204,17 @@
 		37DA16322BA9D87A00FE5650 /* walletView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = walletView.swift; sourceTree = "<group>"; };
 		37DA16362BA9EF2A00FE5650 /* MyBookingsView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBookingsView2.swift; sourceTree = "<group>"; };
 		37DA16382BA9F3AE00FE5650 /* RentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RentView.swift; sourceTree = "<group>"; };
-		37E129832BBE469400B3DCD1 /* UserProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileModel.swift; sourceTree = "<group>"; };
+		37E129832BBE469400B3DCD1 /* ProfileUploadModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileUploadModel.swift; sourceTree = "<group>"; };
 		37E129852BC05BA600B3DCD1 /* RentDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RentDataModel.swift; sourceTree = "<group>"; };
 		37E129872BC05C9E00B3DCD1 /* WalletDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletDataModel.swift; sourceTree = "<group>"; };
 		37E61A9A2BB9BEBA00454421 /* PGDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PGDataModel.swift; sourceTree = "<group>"; };
 		37E61A9C2BB9C12F00454421 /* PGdata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PGdata.swift; sourceTree = "<group>"; };
+		37ED2F352BCA6D7000374BE6 /* UserProfiledata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UserProfiledata.swift; path = "PG connect/ProfileDataModel/UserProfiledata.swift"; sourceTree = SOURCE_ROOT; };
+		37ED2F382BCA701F00374BE6 /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
+		37ED2F3A2BCAAD4D00374BE6 /* ModiftyDND.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModiftyDND.swift; sourceTree = "<group>"; };
+		37ED2F3C2BCACE6000374BE6 /* NotificationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationModel.swift; sourceTree = "<group>"; };
+		37ED2F3E2BCADC0800374BE6 /* BookModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookModel.swift; sourceTree = "<group>"; };
+		37ED2F402BCAF08600374BE6 /* CityResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityResponse.swift; sourceTree = "<group>"; };
 		37F085302B977D9700CE6500 /* PG_GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PG_GridView.swift; sourceTree = "<group>"; };
 		37F085322B9790FC00CE6500 /* Horizontal_ButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Horizontal_ButtonView.swift; sourceTree = "<group>"; };
 		37FEE7432BA2178B009594C4 /* DropdownMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownMenu.swift; sourceTree = "<group>"; };
@@ -185,6 +226,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				37E61A992BB93D1600454421 /* URLImage in Frameworks */,
+				3719107B2BCBE52E007BF425 /* Razorpay.xcframework in Frameworks */,
 				374242062BAAA447005304C8 /* MessageUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -274,6 +316,8 @@
 			isa = PBXGroup;
 			children = (
 				373EFEB32BA3F690004D12B2 /* ProfileEditPage.swift */,
+				371910722BCBABF6007BF425 /* AadharCardSheet.swift */,
+				371910742BCBBECA007BF425 /* DLCardSheet.swift */,
 				372C014D2BA4BC8600C6D330 /* SheetsViews */,
 				377756E12BA7E223009AC031 /* ProfileChangeView */,
 			);
@@ -286,14 +330,6 @@
 				374242052BAAA447005304C8 /* MessageUI.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		3757941B2BBC75C900813828 /* ProfileDataModel */ = {
-			isa = PBXGroup;
-			children = (
-				3757941C2BBC75F600813828 /* UserProfileData.swift */,
-			);
-			path = ProfileDataModel;
 			sourceTree = "<group>";
 		};
 		377756E12BA7E223009AC031 /* ProfileChangeView */ = {
@@ -339,6 +375,7 @@
 		37BBC0262B93659300BC10A1 /* PG connect */ = {
 			isa = PBXGroup;
 			children = (
+				371910792BCBE526007BF425 /* Razorpay.xcframework */,
 				37BBC0272B93659300BC10A1 /* PG_connectApp.swift */,
 				37D5DA472BB6724B002A859A /* Authentication */,
 				37BBC0572B93744000BC10A1 /* ContenView */,
@@ -350,7 +387,7 @@
 				37BBC0B22B961DBC00A7D2A1 /* MyPGView */,
 				37BBC0B32B961DDD00A7D2A1 /* ExpencesView */,
 				37BBC0B42B961DF100A7D2A1 /* ProfileView */,
-				3757941B2BBC75C900813828 /* ProfileDataModel */,
+				37C19C002BCA6CA2008B4900 /* Notification */,
 				37BBC0522B9369E100BC10A1 /* Extension */,
 				373B960D2B98288400DB23A1 /* Garbage Code */,
 				37BBC02B2B93659500BC10A1 /* Assets.xcassets */,
@@ -459,6 +496,7 @@
 			isa = PBXGroup;
 			children = (
 				37BBC0B92B961E4D00A7D2A1 /* ExpencesView.swift */,
+				37A468122BC6E43E00FE6304 /* ExpensesDataModel.swift */,
 				371F8BB72BB05D2A007EE6DD /* AddGroup */,
 				371F8BBA2BB063DA007EE6DD /* AddExpenses */,
 				371F8BC52BB081C1007EE6DD /* ExpenseCard */,
@@ -471,11 +509,13 @@
 			children = (
 				37BBC0BB2B961E5600A7D2A1 /* ProfileView.swift */,
 				373EFEB22BA3F661004D12B2 /* ProfileViews */,
-				37E129822BBE467000B3DCD1 /* ProfileDataModels */,
+				37E129822BBE467000B3DCD1 /* ProfileModelUpload */,
 				37DA162C2BA9CFDF00FE5650 /* RentViews */,
 				37DA162D2BA9CFED00FE5650 /* BookingsViews */,
 				37DA162F2BA9D00100FE5650 /* Wallet */,
 				37DA162E2BA9CFF800FE5650 /* HelpCenter */,
+				37C19BFD2BCA485F008B4900 /* DataModels */,
+				37ED2F372BCA6DE800374BE6 /* ProfileDataModel */,
 			);
 			path = ProfileView;
 			sourceTree = "<group>";
@@ -485,6 +525,7 @@
 			children = (
 				37BC0F452B9A061400B37EAC /* HostelView.swift */,
 				37BC0F492B9AD42200B37EAC /* SubViews */,
+				3719107E2BCBF13A007BF425 /* RazorpayModel.swift */,
 			);
 			path = HostelView;
 			sourceTree = "<group>";
@@ -507,6 +548,7 @@
 			isa = PBXGroup;
 			children = (
 				37BC0F4D2B9ADB5900B37EAC /* GridDataModel.swift */,
+				37ED2F402BCAF08600374BE6 /* CityResponse.swift */,
 			);
 			path = GridDataModel;
 			sourceTree = "<group>";
@@ -528,6 +570,24 @@
 			path = Horizontal_Buttons;
 			sourceTree = "<group>";
 		};
+		37C19BFD2BCA485F008B4900 /* DataModels */ = {
+			isa = PBXGroup;
+			children = (
+				37C19BFE2BCA48AB008B4900 /* ScheduleModel.swift */,
+				37ED2F3E2BCADC0800374BE6 /* BookModel.swift */,
+			);
+			path = DataModels;
+			sourceTree = "<group>";
+		};
+		37C19C002BCA6CA2008B4900 /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+				37ED2F382BCA701F00374BE6 /* NotificationView.swift */,
+				37ED2F3C2BCACE6000374BE6 /* NotificationModel.swift */,
+			);
+			path = Notification;
+			sourceTree = "<group>";
+		};
 		37C8BAD42BAE85B70041D55C /* MenuView */ = {
 			isa = PBXGroup;
 			children = (
@@ -542,6 +602,7 @@
 			children = (
 				37C8BADC2BAEF9390041D55C /* MyRoomView.swift */,
 				37C8BADF2BAF25DC0041D55C /* HostAfriendView.swift */,
+				3765C53B2BC2FABE0066415A /* RoomDataModel.swift */,
 			);
 			path = RoomView;
 			sourceTree = "<group>";
@@ -550,6 +611,8 @@
 			isa = PBXGroup;
 			children = (
 				37C8BAE12BAF2A0D0041D55C /* DNDView.swift */,
+				3765C5032BC104BA0066415A /* DNDResponseModel.swift */,
+				37ED2F3A2BCAAD4D00374BE6 /* ModiftyDND.swift */,
 			);
 			path = DNDview;
 			sourceTree = "<group>";
@@ -604,12 +667,12 @@
 			path = Wallet;
 			sourceTree = "<group>";
 		};
-		37E129822BBE467000B3DCD1 /* ProfileDataModels */ = {
+		37E129822BBE467000B3DCD1 /* ProfileModelUpload */ = {
 			isa = PBXGroup;
 			children = (
-				37E129832BBE469400B3DCD1 /* UserProfileModel.swift */,
+				37E129832BBE469400B3DCD1 /* ProfileUploadModel.swift */,
 			);
-			path = ProfileDataModels;
+			path = ProfileModelUpload;
 			sourceTree = "<group>";
 		};
 		37E61A9E2BB9C27E00454421 /* PG DataModels */ = {
@@ -619,6 +682,15 @@
 				37E61A9A2BB9BEBA00454421 /* PGDataModel.swift */,
 			);
 			path = "PG DataModels";
+			sourceTree = "<group>";
+		};
+		37ED2F372BCA6DE800374BE6 /* ProfileDataModel */ = {
+			isa = PBXGroup;
+			children = (
+				37ED2F352BCA6D7000374BE6 /* UserProfiledata.swift */,
+			);
+			name = ProfileDataModel;
+			path = ../ProfileDataModel;
 			sourceTree = "<group>";
 		};
 		37FEE7422BA21766009594C4 /* Bottom_buttons */ = {
@@ -642,6 +714,7 @@
 				37BBC0202B93659300BC10A1 /* Sources */,
 				37BBC0212B93659300BC10A1 /* Frameworks */,
 				37BBC0222B93659300BC10A1 /* Resources */,
+				3719107D2BCBE52E007BF425 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -780,15 +853,19 @@
 				37C8BAE02BAF25DC0041D55C /* HostAfriendView.swift in Sources */,
 				37BC0F542B9AF40700B37EAC /* AC_buttonsView.swift in Sources */,
 				37F085312B977D9700CE6500 /* PG_GridView.swift in Sources */,
+				37ED2F3D2BCACE6000374BE6 /* NotificationModel.swift in Sources */,
 				37BBC0562B9372DC00BC10A1 /* WelcomeBox.swift in Sources */,
 				377BC2612B9CA55000BC1E9C /* Map.swift in Sources */,
 				37BBC0B62B961E3100A7D2A1 /* HomeSearchView.swift in Sources */,
+				3765C53C2BC2FABE0066415A /* RoomDataModel.swift in Sources */,
 				37E61A9D2BB9C12F00454421 /* PGdata.swift in Sources */,
 				373B960F2B98289F00DB23A1 /* garbage.swift in Sources */,
 				373EFEB42BA3F690004D12B2 /* ProfileEditPage.swift in Sources */,
+				371910752BCBBECA007BF425 /* DLCardSheet.swift in Sources */,
+				37ED2F362BCA6D7000374BE6 /* UserProfiledata.swift in Sources */,
 				37BC0F4B2B9AD43700B37EAC /* ImageSlideView.swift in Sources */,
 				37BC0F562B9B358B00B37EAC /* Amenities.swift in Sources */,
-				37E129842BBE469400B3DCD1 /* UserProfileModel.swift in Sources */,
+				37E129842BBE469400B3DCD1 /* ProfileUploadModel.swift in Sources */,
 				373213612B9DF9A7004AF84C /* GridButtons.swift in Sources */,
 				37E129882BC05C9E00B3DCD1 /* WalletDataModel.swift in Sources */,
 				37FEE7442BA2178B009594C4 /* DropdownMenu.swift in Sources */,
@@ -796,14 +873,18 @@
 				37DA16332BA9D87A00FE5650 /* walletView.swift in Sources */,
 				371F8BC22BB08176007EE6DD /* AddExpensesSheet.swift in Sources */,
 				37C8BADB2BAEBB180041D55C /* SkipSheet.swift in Sources */,
+				37ED2F3F2BCADC0800374BE6 /* BookModel.swift in Sources */,
+				3765C5042BC104BA0066415A /* DNDResponseModel.swift in Sources */,
 				37E129862BC05BA700B3DCD1 /* RentDataModel.swift in Sources */,
 				37BBC0542B9369FB00BC10A1 /* Extension.swift in Sources */,
-				3757941D2BBC75F600813828 /* UserProfileData.swift in Sources */,
 				37AE93402B942F9500E0159C /* TextFieldsSignIN.swift in Sources */,
+				37ED2F3B2BCAAD4D00374BE6 /* ModiftyDND.swift in Sources */,
 				377756E32BA7E24F009AC031 /* ProfileChangeView.swift in Sources */,
 				37D5DA4B2BB67365002A859A /* AuthService.swift in Sources */,
+				37ED2F392BCA701F00374BE6 /* NotificationView.swift in Sources */,
 				37C8BAD92BAEA71E0041D55C /* TodayMenuView.swift in Sources */,
 				37BBC0BC2B961E5600A7D2A1 /* ProfileView.swift in Sources */,
+				3719107F2BCBF13A007BF425 /* RazorpayModel.swift in Sources */,
 				373B960C2B98276D00DB23A1 /* DraggingHeader.swift in Sources */,
 				37349D6E2BA2B0A500F78158 /* SharingButton.swift in Sources */,
 				373EB7EC2B9CC7A7007D54DF /* Rules.swift in Sources */,
@@ -819,6 +900,8 @@
 				3732135A2B9D9749004AF84C /* FilterView.swift in Sources */,
 				37AE933E2B9427FE00E0159C /* SignIn_1.swift in Sources */,
 				37D5DA4F2BB681B3002A859A /* SignupViewModel.swift in Sources */,
+				37A468132BC6E43E00FE6304 /* ExpensesDataModel.swift in Sources */,
+				371910732BCBABF6007BF425 /* AadharCardSheet.swift in Sources */,
 				37BC0F4E2B9ADB5900B37EAC /* GridDataModel.swift in Sources */,
 				37F085332B9790FC00CE6500 /* Horizontal_ButtonView.swift in Sources */,
 				37C8BAE22BAF2A0D0041D55C /* DNDView.swift in Sources */,
@@ -826,6 +909,8 @@
 				37BBC0642B939FB800BC10A1 /* TextFieldsSignUP.swift in Sources */,
 				37BBC0282B93659300BC10A1 /* PG_connectApp.swift in Sources */,
 				371F8BB92BB05D3A007EE6DD /* AddGroupSheet.swift in Sources */,
+				37C19BFF2BCA48AB008B4900 /* ScheduleModel.swift in Sources */,
+				37ED2F412BCAF08600374BE6 /* CityResponse.swift in Sources */,
 				37BC0F512B9AF02900B37EAC /* Daily_btnsView.swift in Sources */,
 				379764F82BA0A936004E1FE9 /* BookingView.swift in Sources */,
 				37E61A9B2BB9BEBA00454421 /* PGDataModel.swift in Sources */,

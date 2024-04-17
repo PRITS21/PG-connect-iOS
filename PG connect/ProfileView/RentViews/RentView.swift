@@ -10,11 +10,10 @@ import SwiftUI
 struct RentView: View {
     @ObservedObject var viewModel = AuthService.shared
     @Environment(\.dismiss) var dismiss
-    @State private var Date: String = "12-12-23"
-    @State private var Month: String = "Jan-23"
-    @State private var Status_image: String = "Unpaid_icon"
-    @State private var Amount: String = "₹2000"
-    @State private var Pending: String = "₹1000"
+    @State private var Year: String = "2024"
+    @State private var Month: String = "2"
+    @State private var paid: String = "Unpaid"
+    @State private var Paid_On: String = "9-4-2024"
     
     var body: some View {
         NavigationView {
@@ -39,45 +38,51 @@ struct RentView: View {
                 
                 VStack {
                     HStack {
-                        Text("Due Date: 12 of Every Month")
+                        Text("Due Date:")
                             .foregroundStyle(Color.black)
-                            .font(.system(size: 11))
-                            
+                            .fontWeight(.semibold)
+                            .font(.system(size: 14))
+                        if let dueDate = viewModel.rentTableResponse?.rentduedate {
+                            Text("\(dueDate) of Every Month")
+                                .foregroundColor(Color(UIColor(hex: "#5E6278")))
+                                .font(.system(size: 14))
+                        } else {
+                            Text("N/A")
+                                .foregroundColor(.red)
+                                .font(.system(size: 11))
+                        }
                         Spacer()
                     }
                     
                     VStack {
                         
-                        HStack(spacing: 20) {
+                        HStack() {
                             
-    
-                            Text("Date")
+                            Text("Month")
                                 .fontWeight(.medium)
+                                .frame(width: 60)
                                 .foregroundColor(Color(UIColor(hex: "#5E6278")))
                                 .font(.system(size: 12.5))
-                                //.padding(.leading, 10)
-                            
-                            Text("Month & Year")
+                                .padding(.leading, 30)
+                            Spacer()
+                            Text("Year")
                                 .fontWeight(.medium)
-                                
+                                .frame(width: 60)
                                 .foregroundColor(Color(UIColor(hex: "#5E6278")))
                                 .font(.system(size: 12.5))
-                            
+                            Spacer()
                             Text("status")
                                 .fontWeight(.medium)
+                                .frame(width: 60)
                                 .foregroundColor(Color(UIColor(hex: "#5E6278")))
                                 .font(.system(size: 12.5))
-                            
-                            Text("Amount")
+                            Spacer()
+                            Text("Paid on")
                                 .fontWeight(.medium)
+                                .frame(width: 60)
                                 .foregroundColor(Color(UIColor(hex: "#5E6278")))
                                 .font(.system(size: 12.5))
-                           
-                            Text("Pending Amount")
-                                .fontWeight(.medium)
-                                .foregroundColor(Color(UIColor(hex: "#5E6278")))
-                                .font(.system(size: 12.5))
-                                //.padding(.trailing, 10)
+                                .padding(.trailing, 30)
                         }.padding(.top, 15)
                         
                         Rectangle()
@@ -86,11 +91,10 @@ struct RentView: View {
                         
                   
                        
-                        ForEach(0..<3) { index in
-                            RentViewRows(date: $Date, Month: $Month, Status_image: .constant("Paid_icon"), Amount: $Amount, Pending: $Pending)
-                            if index != 2 {
+                        ForEach(viewModel.rentTableResponse?.renttable ?? [], id: \.id) { rent in
+                            RentViewRows(rent: rent)
                                 Line().stroke(style: StrokeStyle(lineWidth: 1, dash: [4])).frame(height: 1).foregroundColor(.gray)
-                            }
+                            
                         }
                         
                     }
@@ -112,42 +116,37 @@ struct RentView: View {
 }
 
 struct RentViewRows: View {
-    @Binding var date: String
-    @Binding var Month: String
-    @Binding var Status_image: String
-    @Binding var Amount: String
-    @Binding var Pending: String
-    
+    let rent: Renttable
     
     var body: some View {
-        HStack(spacing: 30) {
+        HStack() {
             
             
-            Text(date)
+            Text("\(rent.month)")
                 .fontWeight(.medium)
+                .frame(width: 60)
                 .foregroundColor(Color(UIColor(hex: "#5E6278")))
-                .font(.system(size: 11))
-            //.padding(.leading, 10)
-            
-            Text(Month)
+                .font(.system(size: 12.5))
+                .padding(.leading, 30)
+            Spacer()
+            Text("\(rent.year)")
                 .fontWeight(.medium)
-            
+                .frame(width: 60)
                 .foregroundColor(Color(UIColor(hex: "#5E6278")))
-                .font(.system(size: 11))
-            
-            Image(uiImage: UIImage(named: "\(Status_image)")!)
-                .frame(width: 50, height: 19)
-            
-            Text(Amount)
+                .font(.system(size: 12.5))
+            Spacer()
+            Text(rent.paid ? "Paid" : "Unpaid")
                 .fontWeight(.medium)
+                .frame(width: 60)
                 .foregroundColor(Color(UIColor(hex: "#5E6278")))
-                .font(.system(size: 11))
-            
-            Text(Pending)
+                .font(.system(size: 12.5))
+            Spacer()
+            Text(rent.paidon ?? "")
                 .fontWeight(.medium)
+                .frame(width: 80)
                 .foregroundColor(Color(UIColor(hex: "#5E6278")))
-                .font(.system(size: 11))
-            
+                .font(.system(size: 12.5))
+                .padding(.trailing, 10)
         }.padding(.top, 5).padding(.bottom)
         
     }
@@ -162,9 +161,23 @@ struct Line: Shape {
     }
 }
 
-#Preview {
-    RentView()
+struct RentView_Previews: PreviewProvider {
+    static var previews: some View {
+        // Create dummy Renttable instances
+        let rent1 = Renttable(month: 1, year: 2023, paid: true, paidon: "2023-01-15", id: "1")
+        let rent2 = Renttable(month: 2, year: 2023, paid: false, paidon: nil, id: "2")
+        let rent3 = Renttable(month: 3, year: 2023, paid: true, paidon: "2023-03-10", id: "3")
+        
+        // Create dummy RentTableResponse with the dummy Renttable instances
+        let rentTableResponse = RentTableResponse(renttable: [rent1, rent2, rent3], rentduedate: 12)
+        
+        // Create a RentView with the dummy data
+        return RentView()
+            .environmentObject(AuthService())
+            .environment(\.colorScheme, .light)
+            .previewLayout(.sizeThatFits)
+            .onAppear {
+                AuthService.shared.rentTableResponse = rentTableResponse
+            }
+    }
 }
-
-
-

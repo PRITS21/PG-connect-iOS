@@ -9,13 +9,13 @@ import SwiftUI
 
 struct DropdownMenu: View {
     @State private var isMenuVisible = false
-    @State private var selectedOption: String
+    @Binding var selectedOption: String
     var options: [String]
     
-    init(options: [String] = ["Option 1", "Option 2", "Option 3"]) {
-        self.options = options
-        self._selectedOption = State(initialValue: options.first ?? "Option 1")
-    }
+    init(selectedOption: Binding<String>, options: [String] = ["Option 1", "Option 2", "Option 3"]) {
+            self._selectedOption = selectedOption
+            self.options = options
+        }
     
     var body: some View {
         VStack {
@@ -52,8 +52,3 @@ struct DropdownMenu: View {
     }
 }
 
-struct ContentView2_Previews: PreviewProvider {
-    static var previews: some View {
-        DropdownMenu(options: ["Option A", "Option B", "Option C"])
-    }
-}

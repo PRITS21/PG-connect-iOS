@@ -12,7 +12,8 @@ struct DOBview: View {
     @Environment(\.dismiss) var dismiss
     @State private var isDatePickerVisible = false
     @State private var buttonText = "Select DOB"
-    
+    @State private var isDOBUploaded = false // Track if DOB is uploaded
+
     var body: some View {
         NavigationView {
             VStack {
@@ -69,18 +70,30 @@ struct DOBview: View {
                     }
                     Spacer()
                     //Next button
-                    NavigationLink(destination: BottomTabView()) {
+                    Button(action: {
+                        AuthService.shared.uploadDOB(dob: birthday.formattedDate2()) { result in
+                            switch result {
+                            case .success(_):
+                                print("DOB uploaded successfully")
+                                isDOBUploaded = true
+                            case .failure(let error):
+                                print("Error uploading DOB: \(error.localizedDescription)")
+                            }
+                        }
+                    }) {
                         Image(uiImage: UIImage(named: "nextBTN")!)
                             .imageScale(.large)
                             .bold()
                             .padding(.trailing, 15)
                     }
-                    .navigationBarBackButtonHidden()
                 }
             }
-            
+            .fullScreenCover(isPresented: $isDOBUploaded, content: {
+                BottomTabView()
+            })
         }
         .navigationBarBackButtonHidden()
+        
     }
     
     // Helper function to format the date

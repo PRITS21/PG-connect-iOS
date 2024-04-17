@@ -14,11 +14,14 @@ struct HomeSearchView: View {
     @State var showSearchBar: Bool = false
     @Environment(\.isDragging) var isDragging
     @State var reset: Bool = false
+    @State private var sheetHeight: CGFloat = .zero
     @State var isFilterSheetPresented = false
     @State private var searchText: String = ""
     @State var activeSheet: ActiveSheet?
     @State var selectedCity: String? = nil
-    
+    @State private var selectedFilters: Int?
+    @State private var selectedFilters2: Int?
+    @State private var selectedFilters3: Int?
     var body: some View {
         GeometryReader{ geometry in
             let safeAreaTop = geometry.safeAreaInsets.top
@@ -42,7 +45,7 @@ struct HomeSearchView: View {
                                     Spacer()
                                 }.padding(.leading, 10).padding(.top, 10).background(Color(.systemGray6))
                                 
-                                PG_GridView(selectedCity: $selectedCity)
+                                PG_GridView(selectedCity: $selectedCity, selectedFilter: $selectedFilters, selectedPGTypeIndex: $selectedFilters2, searchText: $searchText, selectedIndex2: $selectedFilters3)
                                 
                             }
                             .zIndex(0)
@@ -83,13 +86,21 @@ struct HomeSearchView: View {
             .sheet(item: $activeSheet) { item in
                 switch item {
                 case .first:
-                    FilterView()
+                    FilterView(selectedIndex: $selectedFilters, selectedIndices_PG: $selectedFilters2, selectedIndex2: $selectedFilters3)
                         .presentationCornerRadius(21)
                         .presentationDetents([.large, .large])
                 case .second:
                     CitySheet(selectedCity: $selectedCity)
-                        .presentationCornerRadius(21)
-                        .presentationDetents([.height(200)])
+                        .padding(.vertical)
+                        .overlay {
+                            GeometryReader { geometry in
+                                Color.clear.preference(key: InnerHeightPreferenceKey.self, value: geometry.size.height)
+                            }
+                        }
+                        .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
+                            sheetHeight = newHeight
+                        }
+                        .presentationDetents([.height(sheetHeight)]).presentationCornerRadius(21)
                 }
             }
         }
@@ -130,14 +141,11 @@ struct HomeSearchView: View {
                 
                 Spacer(minLength: 0)
                 
-                Button(action: {
-                    
-                }) {
-                    
+                NavigationLink(destination: NotificationView()) {
                     Image(uiImage: UIImage(named: "bell_icon")!)
                         .resizable()
                         .frame(width: 30, height: 30)
-                }
+                }.navigationBarBackButtonHidden()
                 
                 Button(action: {
                     
@@ -159,7 +167,7 @@ struct HomeSearchView: View {
                             .foregroundColor(Color.white)
                         
                         HStack {
-                            TextField("Search Expenses", text: $searchText)
+                            TextField("Search PGs", text: $searchText) // uncomment color Scheme
                                 .font(.system(size: 15))
                                 .padding(.leading, 15)
                                 .frame(height: 40)
@@ -208,7 +216,7 @@ struct HomeSearchView: View {
             
         }
         .animation(.easeInOut(duration: 0.2), value: showSearchBar)
-        .environment(\.colorScheme, .dark)
+        //.environment(\.colorScheme, .dark)
         .padding([.horizontal],15)
         .padding(.top,safeAreaTop + 10)
         .background {
@@ -227,28 +235,65 @@ struct CitySheet: View {
     @Binding var selectedCity: String?
     
     var body: some View {
-        VStack(spacing: 10) {
-            Button("All Cities") {
-                selectedCity = nil
-                dismiss()
+        VStack(alignment: .leading ,spacing: 10) {
+            
+            HStack {
+                Text("Select City").foregroundStyle(Color.black).fontWeight(.bold)
+                    .font(.system(size: 18))
+                Spacer()
+                Image(systemName: "x.circle.fill")
+                    .resizable().frame(width: 20, height: 20)
+                    .foregroundColor(Color(UIColor(hex: "#7F32CD"))).bold()
+                    .onTapGesture { dismiss() }
+            }.padding(.bottom, 20)
+            //1st
+            VStack(alignment: .listRowSeparatorLeading, spacing: 20) {
+                Text("All States").foregroundColor(Color(UIColor(hex: "#7F32CD"))).fontWeight(.bold)
+                    .font(.system(size: 15))
+                Button("All Cities") {
+                    selectedCity = nil
+                    dismiss()
+                }.foregroundColor(.black).fontWeight(.medium).font(.system(size: 18))
             }
-            Button("Hyderabad") {
-                selectedCity = "hyderabad"
-                dismiss()
+            Rectangle()
+                .foregroundStyle(Color(uiColor: .systemGray4))
+                .frame(height: 2).padding(.vertical, 5).padding(.horizontal, 5)
+            //2nd
+            VStack(alignment: .listRowSeparatorLeading, spacing: 20) {
+                Text("Telengana").foregroundColor(Color(UIColor(hex: "#7F32CD"))).fontWeight(.bold)
+                    .font(.system(size: 15))
+                Button("Hyderabad"){
+                    selectedCity = "hyderabad"
+                    dismiss()
+                }.foregroundColor(.black).fontWeight(.medium).font(.system(size: 18))
             }
-            Button("Chennai") {
-                selectedCity = "Chennai"
-                dismiss()
+            Rectangle()
+                .foregroundStyle(Color(uiColor: .systemGray4))
+                .frame(height: 2).padding(.vertical, 5).padding(.horizontal, 5)
+            //3rd
+            VStack(alignment: .listRowSeparatorLeading, spacing: 20) {
+                Text("Tamil Nadu").foregroundColor(Color(UIColor(hex: "#7F32CD"))).fontWeight(.bold)
+                    .font(.system(size: 15))
+                Button("Chennai"){
+                    selectedCity = "Chennai"
+                    dismiss()
+                }.foregroundColor(.black).fontWeight(.medium).font(.system(size: 18))
             }
-            Button("Karnataka") {
-                selectedCity = "Karnataka"
-                dismiss()
+            Rectangle()
+                .foregroundStyle(Color(uiColor: .systemGray4))
+                .frame(height: 2).padding(.vertical, 5).padding(.horizontal, 5)
+            //4th
+            VStack(alignment: .listRowSeparatorLeading, spacing: 20) {
+                Text("Karnataka").foregroundColor(Color(UIColor(hex: "#7F32CD"))).fontWeight(.bold)
+                    .font(.system(size: 15))
+                Button("Banglore"){
+                    selectedCity = "Banglore"
+                    dismiss()
+                }.foregroundColor(.black).fontWeight(.medium).font(.system(size: 18))
             }
-        }
+        }.padding(.horizontal)
     }
 }
-
-
 
 // MARK: Offset Preference Key
 struct OffsetKey: PreferenceKey{

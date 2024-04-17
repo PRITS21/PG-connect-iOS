@@ -88,8 +88,8 @@ struct ProfileEditPage: View {
                     
                     //4th part
                     VStack( spacing: 7) {
-                        ProfileEditDocuments(title: "Aadhar number")
-                        ProfileEditDocuments(title: "Driving license")
+                        ProfileEditDocuments_Aadhar()
+                        ProfileEditDocuments_DL()
                     }
                 }
             }
@@ -258,24 +258,80 @@ struct ProfileEditViewButtons: View {
 }
 
 
-struct ProfileEditDocuments: View {
-    let title: String
+struct ProfileEditDocuments_Aadhar: View {
+    @State private var isAadharCardSheetPresented = false
+    @State private var sheetHeight: CGFloat = .zero
+
     var body: some View {
         HStack {
-            Text(title)
+            Text("Aadhar number")
                 .fontWeight(.medium)
                 .foregroundStyle(Color(UIColor(hex: "#5E6278")))
                 .font(.system(size: 15))
                 .padding(.leading, 40)
             Spacer()
             Button {
-                
+                isAadharCardSheetPresented = true
             } label: {
                 Image(uiImage: UIImage(named: "photos_icon")!)
                     .foregroundStyle(Color.black)
                     .bold()
                     .padding(.trailing, 30)
             }
+        }
+        .sheet(isPresented: $isAadharCardSheetPresented) {
+            AadharCardSheet()
+                .padding(.vertical)
+                .overlay {
+                    GeometryReader { geometry in
+                        Color.clear.preference(key: InnerHeightPreferenceKey.self, value: geometry.size.height)
+                    }
+                }
+                .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
+                    sheetHeight = newHeight
+                }
+                .presentationDetents([.height(sheetHeight)])
+                .presentationCornerRadius(21)
+        }
+        .frame(width: .infinity, height: 70)
+        .background(.white)
+        
+    }
+}
+struct ProfileEditDocuments_DL: View {
+    @State private var isDrivingLicenseSheetPresented = false
+    @State private var sheetHeight: CGFloat = .zero
+
+    var body: some View {
+        HStack {
+            Text("Driving license")
+                .fontWeight(.medium)
+                .foregroundStyle(Color(UIColor(hex: "#5E6278")))
+                .font(.system(size: 15))
+                .padding(.leading, 40)
+            Spacer()
+            Button {
+                isDrivingLicenseSheetPresented = true
+            } label: {
+                Image(uiImage: UIImage(named: "photos_icon")!)
+                    .foregroundStyle(Color.black)
+                    .bold()
+                    .padding(.trailing, 30)
+            }
+        }
+        .sheet(isPresented: $isDrivingLicenseSheetPresented) {
+            DLCardSheet()
+                .padding(.vertical)
+                .overlay {
+                    GeometryReader { geometry in
+                        Color.clear.preference(key: InnerHeightPreferenceKey.self, value: geometry.size.height)
+                    }
+                }
+                .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
+                    sheetHeight = newHeight
+                }
+                .presentationDetents([.height(sheetHeight)])
+                .presentationCornerRadius(21)
         }
         .frame(width: .infinity, height: 70)
         .background(.white)

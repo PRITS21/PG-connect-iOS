@@ -13,6 +13,8 @@ struct food_sheet: View {
     @State private var selectedIndex_food: Int? = nil
     @Environment(\.dismiss) var dismiss
     
+    //Previous Food Sheet in garbage
+    
     var body: some View {
         
         VStack {

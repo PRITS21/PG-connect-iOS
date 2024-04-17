@@ -98,8 +98,13 @@ struct BottomTabView: View {
                         }.padding(.top, 25).padding(.bottom, 5).frame(height: 30)
                     }
                     
-                }.padding(.horizontal, 35)
-            }.shadow(color: Color.gray.opacity(0.4), radius: 1, x: 0, y: 1)
+                }
+                .padding(.horizontal, 35)
+                .padding(.bottom, UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0) // Keep the tab bar above the safe area
+
+            }
+            .edgesIgnoringSafeArea(.bottom)
+            .shadow(color: Color.gray.opacity(0.4), radius: 1, x: 0, y: 1)
              
             
         }.navigationBarBackButtonHidden()

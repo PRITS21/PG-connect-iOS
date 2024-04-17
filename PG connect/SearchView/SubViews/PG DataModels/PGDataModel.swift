@@ -32,6 +32,7 @@ struct PGDetailsData: Codable{
     let latitude: String
     let longitude: String
     let nearby: [Nearby]
+    
 }
 
 
@@ -65,6 +66,17 @@ struct RentType: Codable {
 
 struct RentDetails: Codable {
     let maintenance, advance, onesharing, twosharing, threesharing, foursharing, fivesharing, sixsharing, sevensharing, eightsharing, ninesharing, tensharing: Int?
+    
+    var otherOptions: [(String, Int)] {
+            var options: [(String, Int)] = []
+            if let maintenance = maintenance, maintenance > 0 {
+                options.append(("Maintenance", maintenance))
+            }
+            if let advance = advance, advance > 0 {
+                options.append(("Advance", advance))
+            }
+            return options
+        }
 
     var availableOptions: [(String, Int)] {
         var options: [(String, Int)] = []

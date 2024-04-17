@@ -9,10 +9,15 @@ import SwiftUI
 
 struct ScheduleView: View {
     @Environment(\.dismiss) var dismiss
-       @Binding var isSheetPresented: Bool
-       @State private var isPickerShowing = false
-       @State private var selectedDate = Date()
-       @State private var selectedTime = Date()
+    @Binding var isSheetPresented: Bool
+    @State private var isPickerShowing = false
+    @State private var selectedDate = Date()
+    @State private var selectedTime = Date()
+    @State private var value = 1
+    @State private var alertItem: AlertItem?
+
+    var pgID: String
+    
     
     var body: some View {
         VStack {
@@ -54,14 +59,14 @@ struct ScheduleView: View {
                     .onTapGesture {
                         isPickerShowing.toggle()
                     }
-                PlusMinusBTN2()
+                PlusMinusBTN2(value: $value)
             }.padding(.leading).padding(.top, 10)
             
             if isPickerShowing {
                 DatePicker("",
                         selection: $selectedDate, displayedComponents: [.date, .hourAndMinute])
                                 
-                        }
+            }
             
             //3rd part
             HStack(spacing: 10) {
@@ -77,12 +82,14 @@ struct ScheduleView: View {
                         .cornerRadius(5)
                 }.frame(height: 30)
                 Button(action: {
+                    scheduleVisit()
+                    
                     print("Schedule Button tapped!")
                 }) {
                     Text("Schedule")
                         .font(.system(size: 14))
                         .padding(10)
-                        .background(Color.orange.opacity(0.7))
+                        .background(Color.orange)
                         .foregroundColor(.white)
                         .fontWeight(.medium)
                         .cornerRadius(5)
@@ -91,13 +98,40 @@ struct ScheduleView: View {
             }.padding(.trailing).padding(.top, 10).padding(.bottom, 10)
             
         }
+        .alert(item: $alertItem) { alertItem in // Use alertItem instead of message
+                    Alert(title: Text("Schedule Visit"), message: Text(alertItem.message), dismissButton: .default(Text("OK")))
+                }
     }
+    func scheduleVisit() {
+           let dateFormatter = DateFormatter()
+           dateFormatter.dateFormat = "dd/MM/yyyy"
+           let dateString = dateFormatter.string(from: selectedDate)
+           
+           let timeFormatter = DateFormatter()
+           timeFormatter.dateFormat = "HH:mm"
+           let timeString = timeFormatter.string(from: selectedTime)
+           
+           let noOfPersons = value
+           
+           // Call the scheduleVisit function with the appropriate parameters
+        AuthService.shared.PostscheduleVisit(pgid: pgID, date: dateString, time: timeString, noofpersons: noOfPersons) { result in
+               switch result {
+               case .success(let response):
+                   print("Schedule visit success: \(response)")
+                   self.alertItem = AlertItem(message: response)
+                   // Handle success case if needed
+               case .failure(let error):
+                   print("Schedule visit failure: \(error)")
+                   self.alertItem = AlertItem(message: "Failed to schedule visit. Please try again later.")
+               }
+           }
+       }
 }
 
 
 
 struct PlusMinusBTN2: View {
-    @State private var value = 1
+    @Binding var value: Int // Binding to value variable
     var body: some View {
         VStack {
             HStack {
@@ -135,9 +169,5 @@ struct PlusMinusBTN2: View {
             }
         }
     }
-}
-
-
-#Preview {
-    ScheduleView(isSheetPresented: .constant(true))
+    
 }

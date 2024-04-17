@@ -28,12 +28,15 @@ struct ProfileChangeView: View {
     
     @Environment(\.dismiss) var dismiss
     @State private var licenseNumber = ""
-    @State private var selectedFileURL_DL: URL?
-    @State private var selectedFileURL_Adhr: URL?
+    @State private var selectedFileURL_DL: Image?
+    @State private var selectedFileURL_Adhr: Image?
     
     @State private var selectedImage: Image?
     @State private var isImagePickerPresented = false
     @State private var isDocumentPickerPresented = false
+    @State private var isDLImagePickerPresented = false
+    @State private var isAdharImagePickerPresented = false
+
     
     var body: some View {
         NavigationView {
@@ -220,7 +223,7 @@ struct ProfileChangeView: View {
                                     .padding(.leading, 5)
                                     .overlay(RoundedRectangle(cornerRadius: 5).stroke(lineWidth: 1).foregroundColor(.gray))
                                 Button(action: {
-                                    isDocumentPickerPresented = true
+                                    isAdharImagePickerPresented = true
                                 }) {
                                     Image(uiImage: selectedFileURL_Adhr != nil ? UIImage(systemName: "doc")! : UIImage(named: "FileUpload_button")!)
                                         .resizable()
@@ -229,6 +232,9 @@ struct ProfileChangeView: View {
                                 .frame(width: 120,height: 30)
                                 .background(Color(UIColor(hex: "#EF7C1F")))
                                 .cornerRadius(5)
+                                .sheet(isPresented: $isAdharImagePickerPresented) {
+                                    ImagePicker2(selectedImageURL: $selectedFileURL_Adhr, purpose: .aadharCard)
+                                }
                                 Spacer()
                             }
                         }
@@ -256,8 +262,7 @@ struct ProfileChangeView: View {
                                     .padding(.leading, 5)
                                     .overlay(RoundedRectangle(cornerRadius: 5).stroke(lineWidth: 1).foregroundColor(.gray))
                                 Button(action: {
-                                    isDocumentPickerPresented = true
-                                    
+                                    isDLImagePickerPresented = true
                                 }) {
                                     Image(uiImage: selectedFileURL_DL != nil ? UIImage(systemName: "doc")! : UIImage(named: "FileUpload_button")!)
                                         .resizable()
@@ -266,8 +271,8 @@ struct ProfileChangeView: View {
                                 .frame(width: 120,height: 30)
                                 .background(Color(UIColor(hex: "#EF7C1F")))
                                 .cornerRadius(5)
-                                .sheet(isPresented: $isDocumentPickerPresented) {
-                                    DocumentPicker(url: $selectedFileURL_DL)
+                                .sheet(isPresented: $isDLImagePickerPresented) {
+                                    ImagePicker2(selectedImageURL: $selectedFileURL_DL, purpose: .drivingLicense)
                                 }
                                 Spacer()
                             }
@@ -419,42 +424,70 @@ struct ImagePicker: UIViewControllerRepresentable {
 }
 
 
-// DocumentPicker view
-struct DocumentPicker: UIViewControllerRepresentable {
-    @Binding var url: URL?
+struct ImagePicker2: UIViewControllerRepresentable {
+    enum Purpose {
+        case drivingLicense
+        case aadharCard
+    }
+    
+    @Binding var selectedImageURL: Image?
+    let purpose: Purpose
+    @Environment(\.presentationMode) var presentationMode
     
     func makeCoordinator() -> Coordinator {
         return Coordinator(parent: self)
     }
     
-    func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
-        let picker = UIDocumentPickerViewController(documentTypes: [String(kUTTypePlainText), String(kUTTypePDF)], in: .open)
-        picker.allowsMultipleSelection = false
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let picker = UIImagePickerController()
         picker.delegate = context.coordinator
+        picker.sourceType = .photoLibrary
         return picker
     }
     
-    func updateUIViewController(_ uiViewController: UIDocumentPickerViewController, context: Context) {}
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
     
-    class Coordinator: NSObject, UIDocumentPickerDelegate {
-        var parent: DocumentPicker
+    class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+        let parent: ImagePicker2
         
-        init(parent: DocumentPicker) {
+        init(parent: ImagePicker2) {
             self.parent = parent
         }
         
-        func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-            if let url = urls.first {
-                parent.url = url
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+            if let imageUrl = info[.originalImage] as? UIImage {
+                parent.selectedImageURL = Image(uiImage: imageUrl)
+                
+                // Determine which purpose the image was selected for
+                switch parent.purpose {
+                case .drivingLicense:
+                    AuthService.shared.uploadDrivingLicense(image: imageUrl) { success in
+                        if success {
+                            print("Driving license image uploaded successfully!")
+                        } else {
+                            print("Failed to upload driving license image.")
+                        }
+                    }
+                case .aadharCard:
+                    AuthService.shared.uploadAadharCard(image: imageUrl) { success in
+                        if success {
+                            print("Aadhar card image uploaded successfully!")
+                        } else {
+                            print("Failed to upload Aadhar card image.")
+                        }
+                    }
+                }
             }
+            picker.dismiss(animated: true)
+            parent.presentationMode.wrappedValue.dismiss()
         }
         
-        func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
-            parent.url = nil
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+            picker.dismiss(animated: true)
+            parent.presentationMode.wrappedValue.dismiss()
         }
     }
 }
-
 
 #Preview {
     ProfileChangeView()

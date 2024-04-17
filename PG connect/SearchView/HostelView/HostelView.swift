@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Razorpay
 
 enum ActiveSheet: Identifiable {
     case first, second
@@ -18,14 +19,15 @@ enum ActiveSheet: Identifiable {
 struct HostelView: View {
     @Environment(\.dismiss) var dismiss
     @State var activeSheet: ActiveSheet?
+    @State private var showSheet = false
+    @State private var sheetHeight: CGFloat = .zero
     @State private var isScheduleSheetPresented = false
     @State private var isBookSheetPresented = false
-    @State private var counterHeight: CGFloat = 220
     @ObservedObject var viewModel = AuthService()
     @State private var pgDetails: PGDetailsResponse?
     var selectedPGData: PGData
     @State private var selectedIndex: String?
-   
+    
     init(selectedPGData: PGData) {
         self.selectedPGData = selectedPGData
         
@@ -34,6 +36,7 @@ struct HostelView: View {
             self._selectedIndex = State(initialValue: firstAvailableButton)
         }
     }
+    
     
     var body: some View {
         NavigationView {
@@ -107,7 +110,7 @@ struct HostelView: View {
                                 HorizontalButton(buttonNames: details.pgdata.roomavailability.availableOptions) { index in
                                     self.selectedIndex = index
                                 }
-
+                                
                                 
                                 if let selectedIndex = selectedIndex {
                                     switch selectedIndex {
@@ -118,7 +121,7 @@ struct HostelView: View {
                                         if !details.pgdata.rent.hourly.nonac.availableOptions.isEmpty {
                                             NonAC_buttonsView(ButtonDataNonAC: details.pgdata.rent.hourly.nonac.availableOptions)
                                         }
-
+                                        
                                     case "Daily":
                                         if !details.pgdata.rent.daily.ac.availableOptions.isEmpty {
                                             AC_buttonsView(ButtonDataAC: details.pgdata.rent.daily.ac.availableOptions)
@@ -126,7 +129,7 @@ struct HostelView: View {
                                         if !details.pgdata.rent.daily.nonac.availableOptions.isEmpty {
                                             NonAC_buttonsView(ButtonDataNonAC: details.pgdata.rent.daily.nonac.availableOptions)
                                         }
-
+                                        
                                     case "Monthly":
                                         if !details.pgdata.rent.monthly.ac.availableOptions.isEmpty {
                                             AC_buttonsView(ButtonDataAC: details.pgdata.rent.monthly.ac.availableOptions)
@@ -150,7 +153,7 @@ struct HostelView: View {
                                     .frame(height: 4)
                                     .padding(.top, 5)
                                 MapView(locationText: details.pgdata.pgaddress, latitude: Double(details.pgdata.latitude) ?? 0.0, longitude: Double(details.pgdata.longitude) ?? 0.0)
-
+                                
                                 Rectangle()
                                     .foregroundStyle(Color(uiColor: .systemGray5))
                                     .frame(height: 4)
@@ -173,7 +176,7 @@ struct HostelView: View {
                         Button(action: {
                             print("ScheduleButton tapped!")
                             activeSheet = .first
-
+                            
                         }) {
                             Text("Schedule Visit")
                                 .font(.system(size: 14))
@@ -196,19 +199,39 @@ struct HostelView: View {
                         
                     }.padding(.trailing).padding(.bottom).padding(.top, 2)
                 }.background(Color(.systemGray6).opacity(0.5))
-               
+                
             }
             .sheet(item: $activeSheet) { item in
-                        switch item {
-                        case .first:
-                            ScheduleView(isSheetPresented: $isScheduleSheetPresented)
-                                .presentationDetents([.height(counterHeight)])
-                        case .second:
-                                BookingView(isSheetPresented: $isBookSheetPresented)
-                                    .presentationDetents([.height(550)])
-                            
+                switch item {
+                case .first:
+                    ScheduleView(isSheetPresented: $isScheduleSheetPresented, pgID: selectedPGData._id)
+                        .padding(.vertical)
+                        .overlay {
+                            GeometryReader { geometry in
+                                Color.clear.preference(key: InnerHeightPreferenceKey.self, value: geometry.size.height)
+                            }
                         }
-                    }
+                        .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
+                            sheetHeight = newHeight
+                        }
+                        .presentationDetents([.height(sheetHeight)])
+                        .presentationCornerRadius(21)
+                    
+                case .second:
+                    BookingView(pgData: pgDetails!, isSheetPresented: $isBookSheetPresented)
+                        .padding(.vertical)
+                        .overlay {
+                            GeometryReader { geometry in
+                                Color.clear.preference(key: InnerHeightPreferenceKey.self, value: geometry.size.height)
+                            }
+                        }
+                        .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
+                            sheetHeight = newHeight
+                        }
+                        .presentationDetents([.height(sheetHeight)])
+                        .presentationCornerRadius(21)
+                }
+            }
         }
         .navigationBarBackButtonHidden()
         .onAppear {
@@ -223,6 +246,7 @@ struct HostelView: View {
             }
         }
     }
+    
 }
 
 

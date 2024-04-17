@@ -9,10 +9,6 @@ import SwiftUI
 
 struct AddGroupSheet: View {
     @Environment(\.dismiss) var dismiss
-    
-    @State private var isPickerShowing = false
-    @State private var selectedDate = Date()
-    @State private var selectedTime = Date()
     @State private var GroupName: String = ""
     
     var body: some View {
@@ -33,38 +29,7 @@ struct AddGroupSheet: View {
                 .overlay(RoundedRectangle(cornerRadius: 5).stroke(lineWidth: 0.5).foregroundColor(.black))
                 .cornerRadius(5).padding(.bottom, 10).padding(.top, 5)
             
-            //2nd part
-            HStack(spacing: 5) {
-                Rectangle()
-                    .frame(width: 40,height: 40).cornerRadius(10)
-                    .foregroundStyle(Color(uiColor: .systemGray6))
-                    .overlay(
-                        Image(uiImage: UIImage(named: "Date_icon")!)
-                            .resizable().bold().frame(width: 20, height: 20).imageScale(.large)
-                    ).padding(.trailing, 5)
-                    .onTapGesture {
-                        isPickerShowing.toggle()
-                    }
-                Rectangle()
-                    .frame(width: 40,height: 40).cornerRadius(10)
-                    .foregroundStyle(Color(uiColor: .systemGray6))
-                    .overlay(
-                        Image(uiImage: UIImage(named: "photos_icon")!)
-                            .resizable().bold().frame(width: 20, height: 20).imageScale(.large)
-                    ).padding(.trailing, 5)
-                
-                if isPickerShowing {
-                    DatePicker("",
-                               selection: $selectedDate, displayedComponents: [.date, .hourAndMinute])
-                    
-                } else {
-                    Spacer()
-                }
-                
-            }.padding(.top, 7)
-            
-            
-            
+      
             //3rd part
             HStack(spacing: 10) {
                 Spacer()
@@ -79,7 +44,15 @@ struct AddGroupSheet: View {
                         .cornerRadius(5)
                 }.frame(height: 30)
                 Button(action: {
-                    print("Schedule Button tapped!")
+                    AuthService.shared.uploadGroupName(groupName: GroupName) { result in
+                        switch result {
+                        case .success(let response):
+                            print("Response: \(response)")
+                        case .failure(let error):
+                            print("Error: \(error.localizedDescription)")
+                        }
+                    }
+                    dismiss()
                 }) {
                     Text("Add Group")
                         .font(.system(size: 14))

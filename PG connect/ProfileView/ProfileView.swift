@@ -10,7 +10,8 @@ import SwiftUI
 struct ProfileView: View {
     @ObservedObject var viewModel = AuthService.shared
     @State private var userProfile: UserProfileResponse?
-    
+    @State private var isLoggedOut = false // New state variable
+
     var body: some View {
         NavigationView {
             VStack {
@@ -61,6 +62,7 @@ struct ProfileView: View {
                 
                 Button {
                     AuthService.shared.clearToken()
+                    isLoggedOut = true
                 }label: {
                     Text("Log Out")
                         .fontWeight(.semibold)
@@ -79,6 +81,9 @@ struct ProfileView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color(uiColor: .systemGray6).opacity(0.1))
+            .fullScreenCover(isPresented: $isLoggedOut, content: {
+                StartView2()
+            })
         }
         .onAppear{
             viewModel.fetchUserData()

@@ -11,6 +11,8 @@ struct DNDView: View {
     @Environment(\.dismiss) var dismiss
     @State private var startDate = Date()
     @State private var endDate = Date()
+    @State private var selectedSession = "tiffin"
+    
     
     var body: some View {
         NavigationView {
@@ -29,7 +31,7 @@ struct DNDView: View {
                             Spacer()
                         }
                     }
-                    Text("Do Not Disturb Mode")
+                    Text("Edit DND Mode")
                         .multilineTextAlignment(.center)
                         .font(.system(size: 19))
                         .bold()
@@ -96,12 +98,22 @@ struct DNDView: View {
                 }.padding(.leading, 45).padding(.top, 10)
                 VStack(alignment: .listRowSeparatorLeading) {
                     
-                    DropdownMenu(options: ["Tiffin", "Lunch", "Dinner"])
+                    DropdownMenu(selectedOption: $selectedSession, options: ["tiffin", "lunch", "dinner"])
                         .padding(.top, 5)
                 }.padding(.horizontal, 25)
                 
                 Button {
                     
+                    Task {
+                        do {
+                            try await uploadDND2()
+                            print("!!!!!!!!")
+                        } catch {
+                            print("Error from signup : \(error.localizedDescription)")
+                        }
+                    }
+                    
+                    print("DND Button Tapped")
                 } label: {
                     Text("Start DND")
                         .fontWeight(.semibold)
@@ -119,62 +131,238 @@ struct DNDView: View {
                     .frame(height: 2)
                     .padding(.top, 20)
                 
-                HStack {
-                    Text("Active DND")
-                        .multilineTextAlignment(.center)
-                        .font(.system(size: 16))
-                        .bold()
-                        .foregroundStyle(Color(UIColor(hex: "#7F32CD")))
-                    Spacer()
-                }.padding(.leading, 40).padding(.top,10)
                 
-                ForEach(0..<1) { index in
-                    Rectangle()
-                        .frame(width: .infinity, height: 80)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                    
-                        .overlay (
-                            HStack{
-                                
-                                VStack(alignment: .listRowSeparatorLeading, spacing: 4) {
-                                    HStack(spacing: 1) {
-                                        Text("Start Date: ")
-                                            .fontWeight(.semibold).foregroundStyle(Color.black).font(.system(size: 12.5))
-                                        Text(" 23/03/2024").foregroundStyle(Color.gray).font(.system(size: 12.5))
-                                    }
-                                    HStack(spacing: 1) {
-                                        Text("End Date: ")
-                                            .fontWeight(.semibold).foregroundStyle(Color.black).font(.system(size: 12.5))
-                                        Text(" 23/03/2024").foregroundStyle(Color.gray).font(.system(size: 12.5))
-                                    }
-                                    HStack(spacing: 5) {
-                                        Text("Session:")
-                                            .fontWeight(.semibold).foregroundStyle(Color.black).font(.system(size: 12.5))
-                                        Text("Lunch").foregroundStyle(Color.gray).font(.system(size: 12.5))
-                                    }
-                                }
-                                
-                                Spacer()
-                                Image(uiImage: UIImage(named: "Pencil_icon")!)
-                                    .resizable()
-                                    .frame(width: 15, height: 15)
-                                    .foregroundColor(Color.black).bold()
-                                    .padding(.trailing, 30)
-                                
-                            }.padding(.leading, 20)
-                        )
-                        .shadow(color: Color.gray.opacity(0.5), radius: 4, x: 0, y: 1)
-                        .padding(.horizontal, 25)
-                        .padding(.top, 10)
+                ScrollView {
+                    DNDItemView()
                 }
                 
-                Spacer()
+               // Spacer()
             }
         }.navigationBarBackButtonHidden()
+        
+    }
+    func uploadDND2() async throws {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yyyy"
+        let startingDateStr = dateFormatter.string(from: startDate)
+        print("start: \(startingDateStr)")
+        let endDateStr = dateFormatter.string(from: endDate)
+        do {
+            try await AuthService.shared.uploadDND2(startingDate: startingDateStr, expectedReturnDate: endDateStr, returningMeal: selectedSession) { result in
+                switch result {
+                case .success(let message):
+                    print("DND data uploaded successfully: \(message)")
+                case .failure(let error):
+                    print("Error uploading DND data: \(error.localizedDescription)")
+                }
+            }
+        } catch {
+            // Handle error
+            print("****")
+            
+        }
+    }
+    
+}
+
+
+struct DNDItemView: View {
+    @ObservedObject var viewModel = AuthService.shared
+    
+    var body: some View {
+        VStack {
+            ForEach(viewModel.dndData.keys.sorted(), id: \.self) { sectionKey in
+                SectionView(header: sectionKey, dndItems: viewModel.dndData[sectionKey] ?? []) { dndItem in
+                    deleteDNDItem(id: dndItem._id)
+                }
+            }
+        }
+        .onAppear {
+            viewModel.getDND()
+        }
+    }
+    
+    func deleteDNDItem(id: String) {
+        // Call your deleteDND method here
+        AuthService.shared.deleteDND(id: id)
     }
 }
 
-#Preview {
-    DNDView()
+
+struct SectionView: View {
+    var header: String
+    var dndItems: [DNDItem]
+    var onDelete: ((DNDItem) -> Void)?
+    
+    var body: some View {
+        VStack {
+            HStack {
+                Text(header)
+                    .multilineTextAlignment(.center)
+                    .font(.system(size: 16))
+                    .bold()
+                    .foregroundStyle(Color(UIColor(hex: "#7F32CD")))
+                Spacer()
+            }
+            .padding(.leading, 40)
+            .padding(.top,10)
+            
+            ForEach(dndItems) { dndItem in
+                if header == "Pending DND" {
+                    PendingDNDRowView(dndItem: dndItem, onDelete: {
+                        onDelete?(dndItem)
+                    })
+                } else {
+                    DNDRowView(dndItem: dndItem)
+                }
+            }
+        }
+    }
+}
+
+struct DNDRowView: View {
+    @State private var sheetHeight: CGFloat = .zero
+    @State private var isBottomSheetPresented = false
+    var dndItem: DNDItem
+    
+    var body: some View {
+        Rectangle()
+            .frame(height: 80)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+            .shadow(color: Color.gray.opacity(0.5), radius: 4, x: 0, y: 1)
+            .overlay (
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        HStack(spacing: 1) {
+                            Text("Start Date: ")
+                                .fontWeight(.semibold)
+                                .foregroundStyle(Color.black)
+                                .font(.system(size: 12.5))
+                            Text(dndItem.formattedStartDate)
+                                .foregroundStyle(Color.gray)
+                                .font(.system(size: 12.5))
+                        }
+                        HStack(spacing: 1) {
+                            Text("End Date: ")
+                                .fontWeight(.semibold)
+                                .foregroundStyle(Color.black)
+                                .font(.system(size: 12.5))
+                            Text(dndItem.formattedReturnDate)
+                                .foregroundStyle(Color.gray)
+                                .font(.system(size: 12.5))
+                        }
+                        HStack(spacing: 20) {
+                            HStack(spacing: 5) {
+                                Text("Session:")
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(Color.black)
+                                    .font(.system(size: 12.5))
+                                Text(dndItem.returningmeal)
+                                    .foregroundStyle(Color.gray)
+                                    .font(.system(size: 12.5))
+                            }
+                            HStack(spacing: 5) {
+                                Text("Days: ")
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(Color.black)
+                                    .font(.system(size: 12.5))
+                                Text("\(dndItem.days)")
+                                    .foregroundStyle(Color.gray)
+                                    .font(.system(size: 12.5))
+                            }
+                        }
+                    }
+                    Spacer()
+                    Button(action: {
+                        self.isBottomSheetPresented.toggle()
+                    }) {
+                        Image(systemName: "pencil")
+                            .resizable()
+                            .frame(width: 15, height: 15)
+                            .foregroundColor(.black)
+                            .padding(.trailing, 30)
+                    }
+                        
+                }
+                    .padding(.leading, 20)
+            )
+            .padding(.horizontal, 25)
+            .padding(.top, 10)
+            .sheet(isPresented: $isBottomSheetPresented) {
+                ModiftyDND(DndID: dndItem._id, DndStartingDate: dndItem.formattedStartDate)
+                    .presentationDetents([.height(320)])
+                    .presentationCornerRadius(21)
+            }
+    }
+    
+}
+//MARK: Pending DND
+struct PendingDNDRowView: View {
+    var dndItem: DNDItem
+    var onDelete: (() -> Void)?
+
+    var body: some View {
+        Rectangle()
+            .frame(height: 80)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+            .shadow(color: Color.gray.opacity(0.5), radius: 4, x: 0, y: 1)
+            .overlay (
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        HStack(spacing: 1) {
+                            Text("Start Date: ")
+                                .fontWeight(.semibold)
+                                .foregroundStyle(Color.black)
+                                .font(.system(size: 12.5))
+                            Text(dndItem.formattedStartDate)
+                                .foregroundStyle(Color.gray)
+                                .font(.system(size: 12.5))
+                        }
+                        HStack(spacing: 1) {
+                            Text("End Date: ")
+                                .fontWeight(.semibold)
+                                .foregroundStyle(Color.black)
+                                .font(.system(size: 12.5))
+                            Text(dndItem.formattedReturnDate)
+                                .foregroundStyle(Color.gray)
+                                .font(.system(size: 12.5))
+                        }
+                        HStack(spacing: 20) {
+                            HStack(spacing: 5) {
+                                Text("Session:")
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(Color.black)
+                                    .font(.system(size: 12.5))
+                                Text(dndItem.returningmeal)
+                                    .foregroundStyle(Color.gray)
+                                    .font(.system(size: 12.5))
+                            }
+                            HStack(spacing: 5) {
+                                Text("Days: ")
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(Color.black)
+                                    .font(.system(size: 12.5))
+                                Text("\(dndItem.days)")
+                                    .foregroundStyle(Color.gray)
+                                    .font(.system(size: 12.5))
+                            }
+                        }
+                    }
+                    Spacer()
+                    Image(systemName: "trash")
+                        .resizable()
+                        .frame(width: 15, height: 15)
+                        .foregroundColor(Color(UIColor(hex: "#F25621")))
+                        .padding(.trailing, 30)
+                        .onTapGesture {
+                            onDelete?()
+                        }
+                }
+                .padding(.leading, 20)
+            )
+            .padding(.horizontal, 25)
+            .padding(.top, 10)
+    }
 }

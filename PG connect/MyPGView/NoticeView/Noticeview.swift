@@ -7,12 +7,21 @@
 
 import SwiftUI
 
+struct NoticePeriod: Codable, Hashable {
+    let _id: String
+    let vacatedate: String
+    let status: String
+    let editaccess: Bool
+    let days: Int
+}
+
 struct Noticeview: View {
+    @ObservedObject var viewModel = AuthService.shared
     @Environment(\.dismiss) var dismiss
     @State private var selectedDate = Date()
     @State private var selectedTime = Date()
-    @State private var NoticeAlert = false
-    
+    @State private var showAlert = false
+    @State private var errorMessage: String?
     
     var body: some View {
         NavigationView {
@@ -109,7 +118,8 @@ struct Noticeview: View {
                 }.padding(.leading, 40)
                 
                 Button {
-                    
+                    showAlert = true
+                    viewModel.postNoticePeriod()
                 } label: {
                     Text("Serve Notice Period")
                         .fontWeight(.semibold)
@@ -127,71 +137,129 @@ struct Noticeview: View {
                     .frame(height: 2)
                     .padding(.top, 20)
                 
-                // List
-                ForEach(0..<1) { index in
-                    Rectangle()
-                        .frame(width: .infinity, height: 80)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                    
-                        .overlay (
-                            HStack{
-                                
-                                VStack(alignment: .listRowSeparatorLeading, spacing: 4) {
-                                    HStack(spacing: 1) {
-                                        Text("Vacant Date: ")
-                                            .fontWeight(.semibold).foregroundStyle(Color.black).font(.system(size: 12.5))
-                                        Text(" 23/03/2024").foregroundStyle(Color.gray).font(.system(size: 12.5)).padding(.trailing, 7)
-                                        
-                                        Text("Status:")
-                                            .fontWeight(.semibold).foregroundStyle(Color.black).font(.system(size: 12.5))
-                                        Text("Done").foregroundStyle(Color.gray).font(.system(size: 12.5))
-                                        
-                                        Spacer()
-                                        Button {
-                                            NoticeAlert = true
-                                        } label: {
-                                            Image(systemName: "ellipsis").tint(Color(UIColor(hex: "#F25621"))).bold()
-                                                .padding(.trailing, 10)
-                                        }
-                                        .popover(isPresented: $NoticeAlert,
-                                                 attachmentAnchor: .point(.topLeading),
-                                                 arrowEdge: .bottom,
-                                                 content: {
-                                            VStack(spacing: 15){
-                                                Text("Change Notice period Date")
-                                                    .fontWeight(.semibold).font(.system(size: 12.5))
-                                                Divider()
-                                                Text("Notice Period Cancel").fontWeight(.semibold).font(.system(size: 12.5))
-                                            }
-                                            .frame(minWidth: 200, minHeight: 120)
-                                            .presentationCompactAdaptation(.none)
-                                        })
-                                        
-                                    }
-                                    HStack(spacing: 1) {
-                                        Text("Days: ")
-                                            .fontWeight(.semibold).foregroundStyle(Color.black).font(.system(size: 12.5))
-                                        Text("3").foregroundStyle(Color.gray).font(.system(size: 12.5))
-                                    }
-                                    
-                                }
-                                
-                                Spacer()
-                                
-                            }.padding(.leading, 20)
-                        )
-                        .shadow(color: Color.gray.opacity(0.5), radius: 4, x: 0, y: 1)
-                        .padding(.horizontal, 25)
-                        .padding(.top, 20)
+                if let noticePeriod = viewModel.noticePeriodData?.noticeperiod {
+                    NoticeListView(noticePeriods: noticePeriod)
+                } else {
+                    Text("Loading...")
+                        .padding()
+                        .onAppear {
+                            viewModel.getNoticePeriod()
+                        }
                 }
-                
                 Spacer()
             }
-        }.navigationBarBackButtonHidden()
+        }
+        .navigationBarBackButtonHidden()
+        .onAppear {
+            viewModel.getNoticePeriod()
+        }
+        .alert(isPresented: $showAlert) {
+                    if let responseString = viewModel.noticePeriodResponse {
+                        return Alert(title: Text("Response"), message: Text(responseString), dismissButton: .default(Text("OK")))
+                    } else {
+                        return Alert(title: Text("Error"), message: Text("Failed to get response"), dismissButton: .default(Text("OK")))
+                    }
+                }
+    }
+}
+struct NoticeListView: View {
+    @State private var noticeAlert = false
+    @ObservedObject var viewModel = AuthService.shared
+    
+    var dateFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        return formatter
+    }
+    
+    var noticePeriods: NoticePeriod // Array of NoticePeriod objects
+    
+    var body: some View {
+        Rectangle()
+            .frame(width: .infinity, height: 80)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+            .shadow(color: Color.gray.opacity(0.5), radius: 4, x: 0, y: 1)
+            .overlay (
+                HStack{
+                    VStack(alignment: .listRowSeparatorLeading, spacing: 4) {
+                        HStack(spacing: 1) {
+                            Text("Vacant Date: ")
+                                .fontWeight(.semibold)
+                                .foregroundStyle(Color.black)
+                                .font(.system(size: 12.5))
+                            Text(formatDate(noticePeriods.vacatedate))
+                                .foregroundStyle(Color.gray)
+                                .font(.system(size: 12.5))
+                                .padding(.trailing, 7)
+                            
+                            Text("Status: ")
+                                .fontWeight(.semibold)
+                                .foregroundStyle(Color.black)
+                                .font(.system(size: 12.5))
+                            Text(noticePeriods.status)
+                                .foregroundStyle(Color.gray)
+                                .font(.system(size: 12.5))
+                            
+                            Spacer()
+                            Button {
+                                noticeAlert = true
+                            } label: {
+                                Image(systemName: "ellipsis")
+                                    .tint(Color(UIColor(hex: "#F25621")))
+                                    .bold()
+                                    .padding(.trailing, 10)
+                            }
+                            .popover(isPresented: $noticeAlert,
+                                     attachmentAnchor: .point(.topLeading),
+                                     arrowEdge: .bottom,
+                                     content: {
+                                VStack(spacing: 15){
+                                    Text("Change Notice period Date")
+                                        .fontWeight(.semibold)
+                                        .font(.system(size: 12.5))
+                                    Divider()
+                                    Text("Notice Period Cancel")
+                                        .fontWeight(.semibold)
+                                        .font(.system(size: 12.5))
+                                }
+                                .frame(minWidth: 200, minHeight: 120)
+                                .presentationCompactAdaptation(.none)
+                            })
+                            
+                        }
+                        HStack(spacing: 1) {
+                            Text("Days: ")
+                                .fontWeight(.semibold)
+                                .foregroundStyle(Color.black)
+                                .font(.system(size: 12.5))
+                            Text("\(noticePeriods.days)")
+                                .foregroundStyle(Color.gray)
+                                .font(.system(size: 12.5))
+                        }
+                        
+                    }
+                    
+                    Spacer()
+                    
+                }.padding(.leading, 20)
+            )
+            .padding(.horizontal, 25)
+            .padding(.top, 20)
+        
+    }
+    
+    func formatDate(_ dateString: String) -> String {
+        if let date = dateFormatter.date(from: dateString) {
+            let outputFormatter = DateFormatter()
+            outputFormatter.dateFormat = "dd-MM-yyyy"
+            return outputFormatter.string(from: date)
+        }
+        return "Invalid Date"
     }
 }
 
-#Preview {
-    Noticeview()
+struct NoticePeriodData: Codable {
+    let noticeperiod: NoticePeriod
 }
+

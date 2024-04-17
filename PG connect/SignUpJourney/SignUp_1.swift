@@ -96,6 +96,9 @@ struct SignUp_1: View {
                     Spacer()
                 }
             }
+            .fullScreenCover(isPresented: $viewModel.isLoggedIn, content: {
+                DOBview()
+            })
         }
         .navigationBarBackButtonHidden()
     }

@@ -105,9 +105,9 @@ struct walletView: View {
             }.background(Color(.systemGray6))
         }
         .navigationBarBackButtonHidden()
-            .onAppear {
-                        viewModel.fetchWalletData()
-                    }
+        .onAppear {
+            viewModel.fetchWalletData()
+        }
     }
 }
 
