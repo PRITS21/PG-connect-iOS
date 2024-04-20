@@ -15,7 +15,8 @@ struct PGDetailsResponse: Codable {
     
 }
 
-struct PGDetailsData: Codable{
+struct PGDetailsData: Codable, Identifiable {
+    let id = UUID()
     let roomsharingoptions: [String: Bool]
     let roomavailability: RoomAvailability2
     let rent: Rent
@@ -58,6 +59,8 @@ struct RoomAvailability2: Codable {
 
 struct Rent: Codable {
     let monthly, daily, hourly: RentType
+    
+    
 }
 
 struct RentType: Codable {
@@ -112,6 +115,16 @@ struct RentDetails: Codable {
         }
         return options
     }
+    func hasSharingRentInRange(range: ClosedRange<Int>) -> Bool {
+            let allSharingRentValues = [onesharing, twosharing, threesharing, foursharing, fivesharing, sixsharing, sevensharing, eightsharing, ninesharing, tensharing]
+            
+            for sharingRentValue in allSharingRentValues {
+                if let rent = sharingRentValue, range.contains(rent) {
+                    return true
+                }
+            }
+            return false
+        }
 }
 
 struct Image3: Codable, Hashable {

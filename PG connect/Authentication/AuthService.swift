@@ -14,7 +14,7 @@ class AuthService: ObservableObject {
     @Published var isLoggedIn: Bool = false
     @Published var pgData: [PGData] = []
     @Published var ProfileData: UserProfileResponse?
-    @Published var pgData2: PGDetailsData?
+    @Published var pgData2: [PGDetailsData] = []
     @Published var rentTableResponse: RentTableResponse?
     @Published var walletResponse: WalletResponse?
     @Published var dndData: [String: [DNDItem]] = [:]

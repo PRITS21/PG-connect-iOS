@@ -136,10 +136,11 @@ struct TodayMenuView: View {
                 Spacer()
             }
             .sheet(isPresented: $SkipSheetPresented){
-                MenuView()
+                SkipSheet()
                     .presentationDetents([.height(450)])
                     .presentationCornerRadius(21)
             }
+            
         }.navigationBarBackButtonHidden()
     }
 }

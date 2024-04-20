@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct FilterView: View {
+    @Environment(\.dismiss) var dismiss
     //@State private var selectedIndex: Int? = nil
     @Binding var selectedIndex: Int?
     @Binding var selectedIndices_PG: Int?
@@ -15,9 +16,11 @@ struct FilterView: View {
     let PGType = ["Boys", "Girls", "Co-living"]
     let SharingType = ["1 Share", "2 Share", "3 Share", "4 Share", "5+ Share"]
     @Binding var selectedIndex2: Int?
-    
-    @Environment(\.dismiss) var dismiss
-    
+    @Binding var selectedMinValue: Int
+    @Binding var selectedMaxValue: Int
+    @Binding var RangeFilter: Bool
+    @Binding var RangeApply: Bool
+   
     var body: some View {
         VStack {
             // 1st Part
@@ -27,6 +30,7 @@ struct FilterView: View {
                 Spacer()
                 Button(action: {
                     dismiss()
+                    print("Selected Range: \(self.selectedMinValue) - \(self.selectedMaxValue) && \(selectedIndex)")
                 }) {
                     Image(systemName: "xmark")
                         .resizable()
@@ -77,8 +81,8 @@ struct FilterView: View {
                         Spacer()
                     }.padding(.leading).padding(.top, 5)
                     
-                    SliderView()
-                        .padding([.leading, .trailing])
+                    SliderView(selectedMinValue: $selectedMinValue, selectedMaxValue: $selectedMaxValue) // Updated
+
                     
                     Rectangle()
                         .foregroundStyle(Color(uiColor: .systemGray5))
@@ -224,6 +228,9 @@ struct FilterView: View {
                 Button(action: {
                     //print("Book Button tapped!")
                     dismiss()
+                    RangeFilter = false
+                    RangeApply.toggle()
+                    
                 }) {
                     Text("Apply")
                         .font(.system(size: 14))
@@ -239,9 +246,9 @@ struct FilterView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .cornerRadius(30)
         .transition(.move(edge: .bottom))
-        
         .background(Color.white)
-
+        
     }
     
 }
+

@@ -22,6 +22,12 @@ struct HomeSearchView: View {
     @State private var selectedFilters: Int?
     @State private var selectedFilters2: Int?
     @State private var selectedFilters3: Int?
+    @State private var minValue: Int = 10
+    @State private var maxValue: Int = 510
+    @State private var RangeFilter: Bool = true
+    @State private var RangeApply: Bool = true
+    
+    
     var body: some View {
         GeometryReader{ geometry in
             let safeAreaTop = geometry.safeAreaInsets.top
@@ -45,7 +51,9 @@ struct HomeSearchView: View {
                                     Spacer()
                                 }.padding(.leading, 10).padding(.top, 10).background(Color(.systemGray6))
                                 
-                                PG_GridView(selectedCity: $selectedCity, selectedFilter: $selectedFilters, selectedPGTypeIndex: $selectedFilters2, searchText: $searchText, selectedIndex2: $selectedFilters3)
+                                PG_GridView2(useAllPGIDs: $RangeFilter,RefreshBTN: $RangeApply, selectedCity: $selectedCity, selectedFilter: $selectedFilters,
+                                             selectedPGTypeIndex: $selectedFilters2, searchText: $searchText, selectedIndex2: $selectedFilters3, minValue: $minValue, maxValue: $maxValue)
+                                
                                 
                             }
                             .zIndex(0)
@@ -86,7 +94,7 @@ struct HomeSearchView: View {
             .sheet(item: $activeSheet) { item in
                 switch item {
                 case .first:
-                    FilterView(selectedIndex: $selectedFilters, selectedIndices_PG: $selectedFilters2, selectedIndex2: $selectedFilters3)
+                    FilterView(selectedIndex: $selectedFilters, selectedIndices_PG: $selectedFilters2, selectedIndex2: $selectedFilters3, selectedMinValue: $minValue, selectedMaxValue: $maxValue, RangeFilter: $RangeFilter, RangeApply: $RangeApply)
                         .presentationCornerRadius(21)
                         .presentationDetents([.large, .large])
                 case .second:
@@ -148,6 +156,7 @@ struct HomeSearchView: View {
                 }.navigationBarBackButtonHidden()
                 
                 Button(action: {
+                    print("** Selected Range: \(minValue) & \(maxValue)")
                     
                 }) {
                     
@@ -226,7 +235,7 @@ struct HomeSearchView: View {
             //.background(Color(UIColor(hex: "#7F32CD")))
                 .padding(.bottom,-progress * 70)
         }
-    
+        
     }
 }
 

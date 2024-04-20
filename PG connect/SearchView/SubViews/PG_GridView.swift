@@ -9,17 +9,54 @@ import URLImage
 
 var imageCache = NSCache<NSString, UIImage>()
 
-struct PG_GridView: View {
+struct PG_GridView2: View {
+    @State private var rentRangeChanged = false
+    @Binding var useAllPGIDs: Bool
+    @Binding var RefreshBTN: Bool
+    @State private var pgIDsInRentRange: [String] = []
+    @State private var pgDetails: PGDetailsResponse?
     @ObservedObject var viewModel = AuthService.shared
     @Binding var selectedCity: String?
     @Binding var selectedFilter: Int?
     @Binding var selectedPGTypeIndex: Int?
     @Binding var searchText: String
     @Binding var selectedIndex2: Int?
+    @Binding var minValue: Int
+    @Binding var maxValue: Int
+    @State private var minValueText = ""
+    @State private var maxValueText = ""
+    
+    private func hasSharingRentInRange(rentDetails: RentDetails, range: ClosedRange<Int>) -> Bool {
+        let allSharingRentValues = [rentDetails.onesharing, rentDetails.twosharing, rentDetails.threesharing, rentDetails.foursharing, rentDetails.fivesharing, rentDetails.sixsharing, rentDetails.sevensharing, rentDetails.eightsharing, rentDetails.ninesharing, rentDetails.tensharing]
+        
+        for sharingRentValue in allSharingRentValues {
+            if let rent = sharingRentValue, range.contains(rent) {
+                return true
+            }
+        }
+        return false
+    }
+    
+    private func checkSharingRentInRange(rentDetails: RentType, pgData: PGDetailsData){
+        
+        let acSharingRentInRange = hasSharingRentInRange(rentDetails: rentDetails.ac, range: minValue...maxValue)
+        let nonACSharingRentInRange = hasSharingRentInRange(rentDetails: rentDetails.nonac, range: minValue...maxValue)
+        
+        if acSharingRentInRange || nonACSharingRentInRange {
+            
+            print("At least one sharing rent value falls within the range. \(pgData.pgname)")
+            pgIDsInRentRange.append(pgData._id)
+        } else {
+            print("No Range")
+        }
+    }
     
     var filteredPGDataCombined: [PGData] {
         // Start with all PG data
         var filteredData = viewModel.pgData
+        
+        // Print all PG IDs
+        let allPGIDs = filteredData.map { $0._id }
         
         // Filter based on selected city
         if let selectedCity = selectedCity {
@@ -50,13 +87,15 @@ struct PG_GridView: View {
         }
         
         // Filter based on search text
-            if !searchText.isEmpty {
-                filteredData = filteredData.filter { $0.pgname.lowercased().contains(searchText.lowercased()) }
-            }
+        if !searchText.isEmpty {
+            filteredData = filteredData.filter { $0.pgname.lowercased().contains(searchText.lowercased()) }
+        }
+        
+        
         
         // Define the PG Sharing Options
         let SharingType = ["1 Share", "2 Share", "3 Share", "4 Share", "5+ Share"]
-
+        
         // Filter based on selected sharing type index
         if let selectedIndex2 = selectedIndex2 {
             let sharingType = SharingType[selectedIndex2]
@@ -79,111 +118,124 @@ struct PG_GridView: View {
                 }
             }
         }
-
         
-        return filteredData
+        
+        let selectedPGIDs = useAllPGIDs ? allPGIDs : pgIDsInRentRange
+        
+        // Filter PG data based on selected PG IDs
+        let filteredByIDs = filteredData.filter { selectedPGIDs.contains($0._id) }
+        
+        return filteredByIDs
+        //return filteredData
     }
     
     var body: some View {
         ScrollView {
-            LazyVGrid(columns: columns, spacing: 10) {
-                ForEach(filteredPGDataCombined) { pgData in
-                    NavigationLink(destination: HostelView(selectedPGData: pgData)){
-                        ZStack(alignment: Alignment(horizontal: .trailing, vertical: .top)) {
-                            VStack {
-                                
-                                // Display the RemoteImage if available
-                                if let cachedImage = imageCache.object(forKey: pgData.images.first?.img as! NSString) {
-                                    Image(uiImage: cachedImage)
-                                        .resizable()
-                                        .frame(width: .infinity, height: 150)
-                                } else {
-                                    AsyncImageWithCache(urlString: pgData.images.first?.img ?? "")
-                                        .frame(height: 150)
+            if filteredPGDataCombined.isEmpty {
+                Text("No PGs available")
+                    .foregroundColor(.black)
+                    .font(.title)
+                    .padding()
+            } else {
+                
+                LazyVGrid(columns: columns, spacing: 10) {
+                    ForEach(filteredPGDataCombined) { pgData in
+                        NavigationLink(destination: HostelView(selectedPGData: pgData)){
+                            ZStack(alignment: Alignment(horizontal: .trailing, vertical: .top)) {
+                                VStack {
+                                    // Display the RemoteImage if available
+                                    if let cachedImage = imageCache.object(forKey: pgData.images.first?.img as! NSString) {
+                                        Image(uiImage: cachedImage)
+                                            .resizable()
+                                            .frame(width: .infinity, height: 150)
+                                    } else {
+                                        AsyncImageWithCache(urlString: pgData.images.first?.img ?? "")
+                                            .frame(height: 150)
+                                    }
+                                    
+                                    VStack(spacing: 0) {
+                                        HStack {
+                                            
+                                            Text(pgData.pgname)
+                                                .fontWeight(.semibold)
+                                                .font(.system(size: 14))
+                                            
+                                            Spacer()
+                                        }
+                                        HStack {
+                                            HStack(spacing: 2) {
+                                                Image(uiImage: UIImage(named: "location_icon_gray")!)
+                                                    .frame(width: 14, height: 14)
+                                                Text(pgData.area)
+                                                    .font(.system(size: 10))
+                                            }
+                                            Spacer()
+                                        }.padding(.bottom, 10)
+                                        HStack {
+                                            HStack(spacing: 2) {
+                                                Text("Avialable: ")
+                                                    .fontWeight(.semibold)
+                                                    .font(.system(size: 10))
+                                                Text(pgData.roomavailability.availableOptions.joined(separator: " / "))
+                                                    .font(.system(size: 10))
+                                            }
+                                            Spacer()
+                                        }.padding(.bottom, 7)
+                                        HStack {
+                                            HStack(spacing: 2) {
+                                                Text("Starts from: ")
+                                                    .fontWeight(.semibold)
+                                                    .font(.system(size: 10))
+                                                Text("₹\(pgData.startingfrom)")
+                                                    .font(.system(size: 10))
+                                            }
+                                            Spacer()
+                                        }.padding(.bottom, 10)
+                                    }.padding(.horizontal)
                                 }
-                                /* Display the RemoteImage if available
-                                if let firstImage = pgData.images.first, let url = URL(string: firstImage.img) {
-                                    AsyncImage(url: url) { phase in
-                                        switch phase {
-                                        case .success(let image):
-                                            image
-                                                .resizable()
-                                                .frame(width: .infinity, height: 150)
-                                        case .failure:
-                                            // Placeholder if image loading fails
-                                            Image(systemName: "photo")
-                                                .resizable()
-                                                .aspectRatio(contentMode: .fit)
-                                                .frame(width: 100, height: 100)
-                                                .cornerRadius(10)
-                                                .shadow(radius: 5)
-                                        case .empty:
-                                            // Placeholder while loading
-                                            ProgressView()
-                                        @unknown default:
-                                            EmptyView()
-                                        }
-                                    }
-                                    .frame(height: 150)
-                                }*/
-                                VStack(spacing: 0) {
-                                    HStack {
-                                        
-                                        Text(pgData.pgname)
-                                            .fontWeight(.semibold)
-                                            .font(.system(size: 14))
-                                        Spacer()
-                                    }
-                                    HStack {
-                                        HStack(spacing: 2) {
-                                            Image(uiImage: UIImage(named: "location_icon_gray")!)
-                                                .frame(width: 14, height: 14)
-                                            Text(pgData.area)
-                                                .font(.system(size: 10))
-                                        }
-                                        Spacer()
-                                    }.padding(.bottom, 10)
-                                    HStack {
-                                        HStack(spacing: 2) {
-                                            Text("Avialable: ")
-                                                .fontWeight(.semibold)
-                                                .font(.system(size: 10))
-                                            Text(pgData.roomavailability.availableOptions.joined(separator: " / "))
-                                                .font(.system(size: 10))
-                                        }
-                                        Spacer()
-                                    }.padding(.bottom, 7)
-                                    HStack {
-                                        HStack(spacing: 2) {
-                                            Text("Starts from: ")
-                                                .fontWeight(.semibold)
-                                                .font(.system(size: 10))
-                                            Text("₹\(pgData.startingfrom)")
-                                                .font(.system(size: 10))
-                                        }
-                                        Spacer()
-                                    }.padding(.bottom, 10)
-                                }.padding(.horizontal)
+                                .background(Color.white)
+                                .cornerRadius(10)
+                                .shadow(color: Color.gray.opacity(0.5), radius: 4, x: 0, y: 4)
+                                
                             }
-                            .background(Color.white)
-                            .cornerRadius(10)
-                            .shadow(color: Color.gray.opacity(0.5), radius: 4, x: 0, y: 4)
-                           
-                        }
-                    }.buttonStyle(PlainButtonStyle())
+                        }.buttonStyle(PlainButtonStyle())
+                    }
                 }
+                .padding(.horizontal, 10)
+                .padding(.top, 5)
             }
-            .padding(.horizontal, 10)
-            .padding(.top, 5)
         }
         .onAppear {
             viewModel.fetchPGData()
+        }
+        .onChange(of: RefreshBTN) { _ in
+            
+            updatePGIDsInRentRange()
         }
         
     }
     
     var columns = Array(repeating: GridItem(.flexible(), spacing: 10), count: 2)
+    
+    func updatePGIDsInRentRange() {
+        self.pgIDsInRentRange.removeAll()
+        for pgData in viewModel.pgData {
+            let apiService = AuthService.shared
+            apiService.getPGDetailsForUser(pgData._id) { result in
+                switch result {
+                case .success(let pgDetails):
+                    self.pgDetails = pgDetails
+                    let details = pgDetails
+                    checkSharingRentInRange(rentDetails: details.pgdata.rent.monthly, pgData: details.pgdata)
+                    checkSharingRentInRange(rentDetails: details.pgdata.rent.daily, pgData: details.pgdata)
+                case .failure(let error):
+                    print("Error: \(error)")
+                }
+            }
+        }
+    }
 }
+
 
 //MARK: AsyncImageWithCache to download and cache images asynchronously
 struct AsyncImageWithCache: View {

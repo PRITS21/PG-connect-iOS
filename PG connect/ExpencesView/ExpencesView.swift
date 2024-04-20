@@ -74,12 +74,12 @@ struct ExpencesView: View {
                             isDatePickerPresented.toggle()
                             
                         }
-                    Rectangle()
-                        .frame(width: 40,height: 40).cornerRadius(10)
-                        .foregroundStyle(Color.white)
-                        .overlay(
-                            Image(uiImage: UIImage(named: "filter_icon")!).resizable().frame(width: 18, height: 18)
-                        )
+//                    Rectangle()
+//                        .frame(width: 40,height: 40).cornerRadius(10)
+//                        .foregroundStyle(Color.white)
+//                        .overlay(
+//                            Image(uiImage: UIImage(named: "filter_icon")!).resizable().frame(width: 18, height: 18)
+//                        )
                     
                 }
                 .shadow(color: Color.gray.opacity(0.5), radius: 4, x: 0, y: 1)

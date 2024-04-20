@@ -12,6 +12,9 @@ struct myPGView: View {
     @ObservedObject var viewModel = AuthService.shared
     @Environment(\.dismiss) var dismiss
     
+    @State private var previousOffset: CGFloat = .zero
+        @State private var currentOffset: CGFloat = .zero
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -63,6 +66,7 @@ struct myPGView: View {
                 Spacer()
                 
             }
+            
         }
         .navigationBarBackButtonHidden()
         .onAppear {

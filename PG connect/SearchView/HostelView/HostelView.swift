@@ -37,6 +37,7 @@ struct HostelView: View {
         }
     }
     
+ 
     
     var body: some View {
         NavigationView {
@@ -62,6 +63,9 @@ struct HostelView: View {
                                 .font(.system(size: 20))
                                 .bold()
                                 .foregroundStyle(Color(UIColor(hex: "#7F32CD")))
+                                .onTapGesture {
+                                    print("pgid: \(details.pgdata._id)")
+                                }
                         }
                         
                     }.padding(.top, 5).padding(.bottom, 10)
@@ -246,6 +250,7 @@ struct HostelView: View {
             }
         }
     }
+    
     
 }
 

@@ -219,7 +219,7 @@ struct NoticeListView: View {
                                         .fontWeight(.semibold)
                                         .font(.system(size: 12.5))
                                     Divider()
-                                    Text("Notice Period Cancel")
+                                    Text("Request Notice Cancel")
                                         .fontWeight(.semibold)
                                         .font(.system(size: 12.5))
                                 }

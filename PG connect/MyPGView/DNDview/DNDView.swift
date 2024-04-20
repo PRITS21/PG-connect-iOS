@@ -107,9 +107,8 @@ struct DNDView: View {
                     Task {
                         do {
                             try await uploadDND2()
-                            print("!!!!!!!!")
                         } catch {
-                            print("Error from signup : \(error.localizedDescription)")
+                            print("Error from DND : \(error.localizedDescription)")
                         }
                     }
                     
@@ -212,8 +211,10 @@ struct SectionView: View {
                     PendingDNDRowView(dndItem: dndItem, onDelete: {
                         onDelete?(dndItem)
                     })
-                } else {
+                } else if  header == "Active DND" {
                     DNDRowView(dndItem: dndItem)
+                } else {
+                    PastDNDView(dndItem: dndItem)
                 }
             }
         }
@@ -294,6 +295,70 @@ struct DNDRowView: View {
                     .presentationDetents([.height(320)])
                     .presentationCornerRadius(21)
             }
+    }
+    
+}
+
+struct PastDNDView: View {
+    var dndItem: DNDItem
+    
+    var body: some View {
+        Rectangle()
+            .frame(height: 80)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+            .shadow(color: Color.gray.opacity(0.5), radius: 4, x: 0, y: 1)
+            .overlay (
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        HStack(spacing: 1) {
+                            Text("Start Date: ")
+                                .fontWeight(.semibold)
+                                .foregroundStyle(Color.black)
+                                .font(.system(size: 12.5))
+                            Text(dndItem.formattedStartDate)
+                                .foregroundStyle(Color.gray)
+                                .font(.system(size: 12.5))
+                        }
+                        HStack(spacing: 1) {
+                            Text("End Date: ")
+                                .fontWeight(.semibold)
+                                .foregroundStyle(Color.black)
+                                .font(.system(size: 12.5))
+                            Text(dndItem.formattedReturnDate)
+                                .foregroundStyle(Color.gray)
+                                .font(.system(size: 12.5))
+                        }
+                        HStack(spacing: 20) {
+                            HStack(spacing: 5) {
+                                Text("Session:")
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(Color.black)
+                                    .font(.system(size: 12.5))
+                                Text(dndItem.returningmeal)
+                                    .foregroundStyle(Color.gray)
+                                    .font(.system(size: 12.5))
+                            }
+                            HStack(spacing: 5) {
+                                Text("Days: ")
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(Color.black)
+                                    .font(.system(size: 12.5))
+                                Text("\(dndItem.days)")
+                                    .foregroundStyle(Color.gray)
+                                    .font(.system(size: 12.5))
+                            }
+                        }
+                    }
+                    Spacer()
+                    
+                        
+                }
+                    .padding(.leading, 20)
+            )
+            .padding(.horizontal, 25)
+            .padding(.top, 10)
+            
     }
     
 }
